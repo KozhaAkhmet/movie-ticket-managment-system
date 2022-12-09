@@ -1,5 +1,5 @@
 from datetime import datetime
-from .cinema import CinemaHallSeat
+from cinema import CinemaHallSeat
 
 
 class Booking:

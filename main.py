@@ -1,12 +1,9 @@
 import constants
+import cinema
+
 import customer
 import movie
 import people
-import cinema
 import catalog 
 
-import tkinter
-
-
-
-
+#TODO Serach movie page 

@@ -1,5 +1,5 @@
 from abc import ABC
-from .constants import AccountStatus
+from constants import AccountStatus
 
 
 # For simplicity, we are not defining getter and setter functions. The reader can
@@ -8,7 +8,7 @@ from .constants import AccountStatus
 
 
 class Account:
-    def __init__(self, id, password, status=AccountStatus.Active):
+    def __init__(self, id, password, status=AccountStatus.ACTIVE):
         self.__id = id
         self.__password = password
         self.__status = status
