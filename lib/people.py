@@ -1,5 +1,5 @@
 from abc import ABC
-from constants import AccountStatus
+from lib.Constants import AccountStatus
 
 
 # For simplicity, we are not defining getter and setter functions. The reader can

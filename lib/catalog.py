@@ -32,7 +32,11 @@ class Catalog(Search):
         def search_by_language(self, language):
             return self.__movie_languages.get(language)
 
-        # ...
+        def search_by_genre(self, genre):
+            return self.__movie_genres.get(genre)
+
+        def search_by_release_date(self, rel_date):
+            return self.__movie_genres.get(rel_date)
 
         def search_by_city(self, city_name):
             return self.__movie_cities.get(city_name)
