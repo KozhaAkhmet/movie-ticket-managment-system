@@ -1,9 +1,9 @@
-import constants
-import cinema
+import lib.constants
+import lib.cinema
 
-import customer
-import movie
-import people
-import catalog 
+import lib.customer
+import lib.movie
+import lib.people
+import lib.catalog 
 
-#TODO Serach movie page 
+#TODO Search movie page 
