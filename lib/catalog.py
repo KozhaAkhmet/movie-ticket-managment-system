@@ -1,21 +1,23 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class Search(ABC):
+
+    @abstractmethod
     def search_by_title(self, title):
-        None
-
+        pass
+    @abstractmethod
     def search_by_language(self, language):
-        None
-
+        pass
+    @abstractmethod
     def search_by_genre(self, genre):
-        None
-
+        pass
+    @abstractmethod
     def search_by_release_date(self, rel_date):
-        None
-
+        pass
+    @abstractmethod
     def search_by_city(self, city_name):
-        None
+        pass
 
 
 class Catalog(Search):
