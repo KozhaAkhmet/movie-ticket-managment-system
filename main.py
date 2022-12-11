@@ -9,6 +9,21 @@ from lib.Catalog import Catalog
 import tkinter
 from tkinter import ttk
 
+
+
+my_movie = Movie.Movie(
+    "TITLE","DESCRIPTION",30,"TR",2012,"TR","HORROR","ME"
+)
+
+my_catalog = Catalog()
+my_catalog.add_movie(my_movie)
+
+print(my_catalog.search_by_city(my_movie.__country))
+
+
+
+
+
 #TODO Search Method
 def search_by_filter(genre,release_date,language,title,city,date,seat):
     Catalog.search_by_genre(genre=genre)
