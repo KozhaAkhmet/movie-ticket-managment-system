@@ -1,5 +1,7 @@
 from datetime import datetime
+
 from lib import People
+
 
 class Show:
     def __init__(self, id, played_at, movie, start_time, end_time):
@@ -19,7 +21,6 @@ class Movie:
                  city: str,
                  genre: str,
                  added_by: People.Admin):
-
         self.__title = title
         self.__description = description
         self.__duration_in_mins = duration_in_mins
@@ -30,6 +31,3 @@ class Movie:
         self.__movie_added_by = added_by
 
         self.__shows = []
-
-    def get_shows(self):
-        None

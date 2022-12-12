@@ -1,5 +1,6 @@
 from datetime import datetime
-from lib.Cinema import CinemaHallSeat 
+
+from lib.Cinema import CinemaHallSeat
 
 
 class Booking:
