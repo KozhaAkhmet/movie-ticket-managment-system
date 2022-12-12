@@ -4,7 +4,7 @@ from lib import Cinema
 from lib import Customer
 from lib import Movie
 from lib import People
-from lib.Catalog import Catalog
+from lib import Catalog
 
 import tkinter
 from tkinter import ttk
