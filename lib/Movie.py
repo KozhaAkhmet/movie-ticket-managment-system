@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from lib import People
 
 
@@ -14,20 +13,24 @@ class Show:
 
 
 class Movie:
+
+    def __str__(self) -> str:
+        return "{" + self.title + "," + self.genre + "}"
+
     def __init__(self, title: str,
                  description: str,
                  duration_in_mins: int,
-                 language: str, release_date: datetime,
+                 language: str,
+                 release_date: datetime,
                  city: str,
                  genre: str,
                  added_by: People.Admin):
-        self.__title = title
-        self.__description = description
-        self.__duration_in_mins = duration_in_mins
-        self.__language = language
-        self.__release_date = release_date
-        self.__city = city
-        self.__genre = genre
-        self.__movie_added_by = added_by
-
-        self.__shows = []
+        self.title = title
+        self.description = description
+        self.duration_in_mins = duration_in_mins
+        self.language = language
+        self.release_date = release_date
+        self.city = city
+        self.genre = genre
+        self.movie_added_by = added_by
+        self.shows = []
