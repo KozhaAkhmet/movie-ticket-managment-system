@@ -35,9 +35,9 @@ class Search(ABC):
     def remove_movie(self, movie: Movie):
         pass
 
-    @abstractmethod
-    def search_by_filter(self, genre, release_date, language, title, city, date, seat) -> List[Movie]:
-        pass
+    # @abstractmethod
+    # def search_by_filter(self, genre, release_date, language, title, city, date, seat) -> List[Movie]:
+    #     pass
 
 
 class Catalog(Search, ABC):
