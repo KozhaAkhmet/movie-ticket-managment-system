@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import List, Dict
 
 from lib.Movie import Movie
+import pandas as pd
 
 
 class Search(ABC):
@@ -35,9 +36,12 @@ class Search(ABC):
     def remove_movie(self, movie: Movie):
         pass
 
-    # @abstractmethod
-    # def search_by_filter(self, genre, release_date, language, title, city, date, seat) -> List[Movie]:
-    #     pass
+    def get_all_movies(self):
+        pass
+
+    @abstractmethod
+    def search_by_filter(self, filter_values: list):
+        pass
 
 
 class Catalog(Search, ABC):
@@ -47,6 +51,8 @@ class Catalog(Search, ABC):
         self.__movie_genres: Dict[str, List[Movie]] = {}
         self.__movie_release_dates: Dict[datetime, List[Movie]] = {}
         self.__movie_cities: Dict[str, List[Movie]] = {}
+        self.__all_movies: List[Dict] = []
+        self.__data_frame: pd.DataFrame = pd.DataFrame()
 
     def add_movie(self, movie: Movie):
         if movie.language in self.__movie_languages.keys():
@@ -74,6 +80,9 @@ class Catalog(Search, ABC):
         else:
             self.__movie_cities[movie.city] = [movie]
 
+        if movie not in self.__all_movies:
+            self.__all_movies.append(movie.to_dict())
+
     def remove_movie(self, movie: Movie):
         del self.__movie_languages[movie.language]
         del self.__movie_cities[movie.city]
@@ -96,20 +105,21 @@ class Catalog(Search, ABC):
     def search_by_city(self, city_name) -> List[Movie]:
         return self.__movie_cities.get(city_name)
 
-    # def search_by_filter(self, genre, release_date, language, title, city, date, seat):
-    #     if genre is not None:
-    #         return Catalog.search_by_genre(genre)
-    #     if release_date is not None:
-    #         return Catalog.search_by_release_date(release_date)
-    #     if language is not None:
-    #         return Catalog.search_by_language(language)
-    #     if title is not None:
-    #         return Catalog.search_by_title(title)
-    #     if city is not None:
-    #         return Catalog.search_by_city(city)
-    #     # Print search output
+    def get_all_movies(self) -> List[Dict]:
+        return self.__all_movies
 
-    def print_this(self):
-        print(self)
+    def search_by_filter(self, filter_values: dict):
+        global result_filter, tmp, i
+        all_movie_df = pd.DataFrame(self.__all_movies)
 
+        i = 0
+        for filter_key in filter_values.keys():
+            if filter_values[filter_key] is not None:
+                result_filter = (all_movie_df[filter_key] == filter_values[filter_key])
+                if i != 0:
+                    result_filter = result_filter & tmp
+                i = i + 1
+                tmp = result_filter
 
+        print(all_movie_df[result_filter])
+        return all_movie_df[result_filter]

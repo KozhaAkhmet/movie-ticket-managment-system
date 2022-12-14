@@ -15,7 +15,7 @@ class Show:
 class Movie:
 
     def __str__(self) -> str:
-        return "{" + self.title + "," + self.genre + "}"
+        return "{" + self.title + "," + self.genre + "," + self.description + "}"
 
     def __init__(self, title: str,
                  description: str,
@@ -34,3 +34,11 @@ class Movie:
         self.genre = genre
         self.movie_added_by = added_by
         self.shows = []
+
+    def to_dict(self):
+        tmp_dict = {'Title': self.title,
+                    'Language': self.language,
+                    "Rel_date": self.release_date,
+                    "City": self.city,
+                    "Genre": self.genre}
+        return tmp_dict
