@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from lib.People import Admin
 from lib.Cinema import CinemaHall
 
@@ -41,8 +41,8 @@ class Show:
     def __init__(self,
                  played_at: CinemaHall,
                  movie: Movie,
-                 start_time: datetime,
-                 end_time: datetime):
+                 start_time: datetime.date,
+                 end_time: datetime.date):
         self.__created_on = datetime.date.today()
         self.__start_time = start_time
         self.__end_time = end_time

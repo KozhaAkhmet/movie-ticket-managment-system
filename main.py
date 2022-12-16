@@ -4,7 +4,9 @@ from tkinter.messagebox import showinfo
 
 from lib.Catalog import Catalog
 from lib.Movie import Movie
-from lib.FakeData import my_catalog
+from lib.FakeData import movie_catalog
+import src.UserLogin as UserLogin
+import src.UserSignIn as UserSignIn
 
 
 def show_result(txt: str):
@@ -13,9 +15,9 @@ def show_result(txt: str):
     )
 
 
-def movie_ui(result_dict, frame, row):
+def movie_ui(result_dict, frame):
     i = 0
-    row = row + 1
+    row = 1
     for movie in result_dict.values():
         print(movie)
         movie_label = tk.Label(frame, text="Movie")
@@ -30,7 +32,7 @@ def movie_ui(result_dict, frame, row):
 
 
 def main():
-    # for movie in my_catalog.get_all_movies():
+    # for movie in movie_catalog.get_all_movies():
     #     print(movie.title)
     # print("\n")
     window = tk.Tk()
@@ -102,14 +104,14 @@ def main():
     # --------------------------------------------
 
     def search_by_filter():
+        #UserSignIn.user_sign_in()
         print("Search pressed!")
-        filter_value = {"Title"
-            "City": "Turkey"
+        filter_value = {"City": "England"
                         }
 
-        dict_result = my_catalog.search_by_filter(filter_value)
+        dict_result = movie_catalog.search_by_filter(filter_value)
         print(dict_result)
-        movie_ui(dict_result, frame, 3, 0)
+        movie_ui(dict_result, frame)
 
     # Search Button
     search_button = tk.Button(main_frame, text="Search", command=search_by_filter)

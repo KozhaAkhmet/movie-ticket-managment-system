@@ -1,5 +1,4 @@
 from lib.Constants import Address, SeatType
-from lib.Movie import Show
 
 
 class City:
@@ -15,11 +14,9 @@ class City:
 class CinemaHall:
     def __init__(self,
                  name: str,
-                 total_seats: int,
-                 shows: Show):
+                 total_seats: int):
         self.__name = name
         self.__total_seats = total_seats
-        self.__shows = shows
 
 
 class Cinema:

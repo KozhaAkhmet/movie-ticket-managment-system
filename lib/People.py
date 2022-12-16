@@ -53,11 +53,6 @@ class Admin(Person):
         None
 
 
-class FrontDeskOfficer(Person):
-    def create_booking(self, booking):
-        None
-
-
 class Guest:
     def register_account(self):
         None

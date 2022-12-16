@@ -1,19 +1,26 @@
-from datetime import datetime
+import datetime
+from typing import List
+
 from lib.Cinema import CinemaHallSeat
-from lib.Constants import BookingStatus,PaymentStatus
+from lib.Constants import BookingStatus, PaymentStatus, SeatType
 from lib.Movie import Show
-from abc import ABC, abstractmethod
+import lib.Constants as Constants
 
 
 class ShowSeat(CinemaHallSeat):
-    def __init__(self, id, is_reserved, price, seat_type):
-        super().__init__(id, seat_type)
-        self.__show_seat_id = id
+    def __init__(self, seat_number: int,
+                 is_reserved: bool,
+                 price: float,
+                 seat_row: int,
+                 seat_coulomn: int,
+                 seat_type: SeatType):
+        super().__init__(seat_row, seat_coulomn, seat_type)
+        self.__show_seat_number = seat_number
         self.__is_reserved = is_reserved
         self.__price = price
 
 
-class Payment(ABC):
+class Payment:
     def __init__(self,
                  amount,
                  transaction_id: int,
@@ -24,23 +31,13 @@ class Payment(ABC):
         self.__status = payment_status
 
 
-class CreditCardTransaction(Payment):
-    def __init__(self, name_on_card: str, amount, transaction_id, payment_status):
-        super().__init__(amount, transaction_id, payment_status)
-        self.__name_on_card = name_on_card
-
-
-class CashTransaction(Payment):
-    def __init__(self, amount, transaction_id, payment_status):
-        super().__init__(amount, transaction_id, payment_status)
-
-
 class Booking:
     def __init__(self, booking_number: str,
                  number_of_seats: int,
                  status: BookingStatus,
                  show: Show,
-                 show_seats, payment: Payment):
+                 show_seats: ShowSeat,
+                 payment: Payment):
         self.__booking_number = booking_number
         self.__number_of_seats = number_of_seats
         self.__created_on = datetime.date.today()
@@ -49,8 +46,8 @@ class Booking:
         self.__seats = show_seats
         self.__payment = payment
 
-    def make_payment(self, payment):
-        None
+    def make_payment(self, payment: Payment):
+        pass
 
     def cancel(self):
         None
