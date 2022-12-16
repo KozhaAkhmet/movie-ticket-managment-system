@@ -18,7 +18,12 @@ class PaymentStatus(Enum):
 
 
 class Address:
-    def __init__(self, street, city, state, zip_code, country):
+    def __init__(self,
+                 street: str,
+                 city: str,
+                 state: str,
+                 zip_code: str,
+                 country: str):
         self.__street_address = street
         self.__city = city
         self.__state = state
