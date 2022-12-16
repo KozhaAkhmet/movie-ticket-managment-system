@@ -1,3 +1,5 @@
+from typing import List
+
 from lib.Constants import Address, SeatType
 
 
@@ -23,7 +25,7 @@ class Cinema:
     def __init__(self, name: str,
                  total_cinema_halls: int,
                  address: Address,
-                 halls: CinemaHall):
+                 halls: List[CinemaHall]):
         self.__name = name
         self.__total_cinema_halls = total_cinema_halls
         self.__location = address

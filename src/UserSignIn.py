@@ -25,6 +25,7 @@ def user_sign_in():
 
     name_entry = tk.Entry(main_frame,width=width)
     name_entry.grid(row=1, column=0, padx=padx)
+    # enry value add
 
     pwd_label = tk.Label(main_frame, text="Password")
     pwd_label.grid(row=2, column=0)

@@ -104,7 +104,7 @@ def main():
     # --------------------------------------------
 
     def search_by_filter():
-        #UserSignIn.user_sign_in()
+        #dict = UserSignIn.user_sign_in()
         print("Search pressed!")
         filter_value = {"City": "England"
                         }
