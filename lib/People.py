@@ -1,6 +1,5 @@
 from abc import ABC
-
-from lib.Constants import AccountStatus
+from lib.Constants import AccountStatus, Address
 
 
 # For simplicity, we are not defining getter and setter functions. The reader can
@@ -9,7 +8,10 @@ from lib.Constants import AccountStatus
 
 
 class Account:
-    def __init__(self, id, password, status=AccountStatus.ACTIVE):
+    def __init__(self,
+                 id: str,
+                 password: str,
+                 status: AccountStatus):
         self.__id = id
         self.__password = password
         self.__status = status
@@ -18,9 +20,13 @@ class Account:
         None
 
 
-# from abc import ABC, abstractmethod
 class Person(ABC):
-    def __init__(self, name, address, email, phone, account):
+    def __init__(self,
+                 name: str,
+                 address: Address,
+                 email: str,
+                 phone,
+                 account):
         self.__name = name
         self.__address = address
         self.__email = email

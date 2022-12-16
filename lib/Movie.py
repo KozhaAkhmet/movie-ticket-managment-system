@@ -1,15 +1,6 @@
 from datetime import datetime
-from lib import People
-
-
-class Show:
-    def __init__(self, id, played_at, movie, start_time, end_time):
-        self.__show_id = id
-        self.__created_on = datetime.date.today()
-        self.__start_time = start_time
-        self.__end_time = end_time
-        self.__played_at = played_at
-        self.__movie = movie
+from lib.People import Admin
+from lib.Cinema import CinemaHall
 
 
 class Movie:
@@ -24,7 +15,9 @@ class Movie:
                  release_date: datetime,
                  city: str,
                  genre: str,
-                 added_by: People.Admin):
+                 added_by: Admin,
+                 image: str):
+        self.image = image
         self.title = title
         self.description = description
         self.duration_in_mins = duration_in_mins
@@ -42,3 +35,16 @@ class Movie:
                     "City": self.city,
                     "Genre": self.genre}
         return tmp_dict
+
+
+class Show:
+    def __init__(self,
+                 played_at: CinemaHall,
+                 movie: Movie,
+                 start_time: datetime,
+                 end_time: datetime):
+        self.__created_on = datetime.date.today()
+        self.__start_time = start_time
+        self.__end_time = end_time
+        self.__played_at = played_at
+        self.__movie = movie

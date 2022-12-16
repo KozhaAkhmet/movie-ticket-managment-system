@@ -121,5 +121,4 @@ class Catalog(Search, ABC):
                 i = i + 1
                 tmp = result_filter
 
-        print(all_movie_df[result_filter])
-        return all_movie_df[result_filter]
+        return all_movie_df[result_filter].T.to_dict()
