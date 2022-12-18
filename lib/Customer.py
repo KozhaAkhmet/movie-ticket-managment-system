@@ -8,14 +8,14 @@ import lib.Constants as Constants
 
 
 class ShowSeat(CinemaHallSeat):
-    def __init__(self, seat_number: int,
+    def __init__(self, seat_id: int,
                  is_reserved: bool,
                  price: float,
                  seat_row: int,
                  seat_coulomn: int,
                  seat_type: SeatType):
         super().__init__(seat_row, seat_coulomn, seat_type)
-        self.__show_seat_number = seat_number
+        self.__show_seat_number = seat_id
         self.__is_reserved = is_reserved
         self.__price = price
 

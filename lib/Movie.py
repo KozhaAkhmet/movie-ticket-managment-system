@@ -41,10 +41,24 @@ class Show:
     def __init__(self,
                  played_at: CinemaHall,
                  movie: Movie,
-                 start_time: datetime.date,
-                 end_time: datetime.date):
+                 start_time: datetime.datetime
+                 ):
         self.__created_on = datetime.date.today()
         self.__start_time = start_time
-        self.__end_time = end_time
         self.__played_at = played_at
         self.__movie = movie
+        # TODO endtime = start_time + movie_duration but with correct types
+        self.__end_time = start_time + datetime.timedelta(minutes=self.__movie.duration_in_mins)
+
+    def get_cinema_hall(self):
+        return self.__played_at
+
+    def to_dict(self):
+        tmp_dict = {'Played_at': self.__played_at,
+                    'Seat':self.__played_at.seats_available(),
+                    'Title': self.__movie.title,
+                    'Language': self.__movie.language,
+                    "Rel_date": self.__movie.release_date,
+                    "City": self.__movie.city,
+                    "Genre": self.__movie.genre}
+        return tmp_dict

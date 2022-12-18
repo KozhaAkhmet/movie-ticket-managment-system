@@ -2,8 +2,13 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import List, Dict
 
-from lib.Movie import Movie
+from lib.Cinema import CinemaHall
+from lib.Movie import Movie, Show
 import pandas as pd
+
+result_filter = 0
+tmp = 0
+i = 0
 
 
 class Search(ABC):
@@ -111,14 +116,40 @@ class Catalog(Search, ABC):
     def search_by_filter(self, filter_values: dict):
         global result_filter, tmp, i
         all_movie_df = pd.DataFrame(self.__all_movies)
-
+        print(all_movie_df)
         i = 0
+        try:
+            for filter_key in filter_values.keys():
+                # print(filter_values[filter_key])
+                if filter_values[filter_key] != "":
+                    result_filter = (all_movie_df[filter_key] == filter_values[filter_key])
+                    if i != 0:
+                        result_filter = result_filter & tmp
+                    i = i + 1
+                    tmp = result_filter
+
+            return all_movie_df[result_filter].T.to_dict()
+        except KeyError:
+            return {}
+
+def search_show_by_filter(show_list: List[Show], filter_values: dict):
+    global result_filter, tmp, i
+    show_list = pd.DataFrame(show_list)
+    print(show_list)
+    i = 0
+    try:
         for filter_key in filter_values.keys():
-            if filter_values[filter_key] is not None:
-                result_filter = (all_movie_df[filter_key] == filter_values[filter_key])
+            # print(filter_values[filter_key])
+            if filter_values[filter_key] != "":
+                if filter_key == "Seat":
+                    result_filter = (show_list[filter_key] >= int(filter_values[filter_key]))
+                else:
+                    result_filter = (show_list[filter_key] == filter_values[filter_key])
                 if i != 0:
                     result_filter = result_filter & tmp
                 i = i + 1
                 tmp = result_filter
-
-        return all_movie_df[result_filter].T.to_dict()
+        print(show_list[result_filter].T.to_dict())
+        return show_list[result_filter].T.to_dict()
+    except KeyError:
+        return {}
