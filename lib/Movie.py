@@ -17,23 +17,41 @@ class Movie:
                  genre: str,
                  added_by: Admin,
                  image: str):
-        self.image = image
-        self.title = title
-        self.description = description
-        self.duration_in_mins = duration_in_mins
-        self.language = language
-        self.release_date = release_date
-        self.city = city
-        self.genre = genre
-        self.movie_added_by = added_by
-        self.shows = []
+        self.__image = image
+        self.__title = title
+        self.__description = description
+        self.__duration_in_mins = duration_in_mins
+        self.__language = language
+        self.__release_date = release_date
+        self.__city = city
+        self.__genre = genre
+        self.__movie_added_by = added_by
+        self.__shows = []
+
+    def get_title(self):
+        return self.__title
+
+    def get_language(self):
+        return self.__language
+
+    def get_rel_date(self):
+        return self.__release_date
+
+    def get_genre(self):
+        return self.__genre
+
+    def get_city(self):
+        return self.__city
+
+    def get_duration(self):
+        return self.__duration_in_mins
 
     def to_dict(self):
-        tmp_dict = {'Title': self.title,
-                    'Language': self.language,
-                    "Rel_date": self.release_date,
-                    "City": self.city,
-                    "Genre": self.genre}
+        tmp_dict = {'Title': self.__title,
+                    'Language': self.__language,
+                    "Rel_date": self.__release_date,
+                    "City": self.__city,
+                    "Genre": self.get_genre()}
         return tmp_dict
 
 
@@ -48,17 +66,21 @@ class Show:
         self.__played_at = played_at
         self.__movie = movie
         # TODO endtime = start_time + movie_duration but with correct types
-        self.__end_time = start_time + datetime.timedelta(minutes=self.__movie.duration_in_mins)
+        self.__end_time = start_time + datetime.timedelta(minutes=self.__movie.get_duration())
 
     def get_cinema_hall(self):
         return self.__played_at
 
+    def get_date(self):
+        return self.__start_time
+
     def to_dict(self):
         tmp_dict = {'Played_at': self.__played_at,
-                    'Seat':self.__played_at.seats_available(),
-                    'Title': self.__movie.title,
-                    'Language': self.__movie.language,
-                    "Rel_date": self.__movie.release_date,
-                    "City": self.__movie.city,
-                    "Genre": self.__movie.genre}
+                    'Seat': self.__played_at.seats_available(),
+                    'Title': self.__movie.get_title(),
+                    'Language': self.__movie.get_language(),
+                    "Rel_date": self.__movie.get_rel_date(),
+                    "City": self.__movie.get_city(),
+                    "Genre": self.__movie.get_genre(),
+                    "Date": self.__start_time.date().day}
         return tmp_dict
