@@ -29,14 +29,23 @@ class CinemaHallSeat:
 class CinemaHall:
     def __init__(self,
                  name: str,
-                 total_seats: int,
+                 total_row: int,
+                 total_coulomn: int,
                  cinema_halls_seats: List[CinemaHallSeat]):
         self.__name = name
-        self.__total_seats = total_seats
+        self.__total_seats = total_row * total_coulomn
+        self.__total_row = total_row
+        self.__total_coulomn = total_coulomn
         self.__cinema_halls_seats = cinema_halls_seats
 
     def get_total_sets(self):
         return self.__total_seats
+
+    def get_total_row(self):
+        return self.__total_row
+
+    def get_total_coulomn(self):
+        return self.__total_coulomn
 
     def get_cinema_hall_seats(self):
         return self.__cinema_halls_seats

@@ -14,8 +14,6 @@ __width = 18
 def __cancel_command():
     return "Canceled"
 
-
-
     def show_result(self, txt: str):
         showinfo(
             message=f'{txt}!'

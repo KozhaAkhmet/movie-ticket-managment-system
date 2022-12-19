@@ -42,6 +42,9 @@ class Person(ABC):
         self.__phone = phone
         self.__account = account
 
+    def get_name(self):
+        return self.__name
+
     def __str__(self):
         return str(self.__account.get_user_id())
 

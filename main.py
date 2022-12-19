@@ -2,18 +2,21 @@ import datetime
 import tkinter as tk
 from tkinter.messagebox import showinfo
 
+from lib.Cinema import CinemaHall
 from lib import Catalog
 from lib.People import Guest, Account, Customer
 from lib.Constants import AccountStatus
 
-from src.SearchResult import search_result_ui
+# from src.SearchResult import search_result_ui
 
 from Data.FakeData import show_list
 from Data.FakeAccounts import user_list
 
 current_user = Guest()
 current_datetime = datetime.datetime(2022, 12, 22, 10, 30)
-result_instance = 4
+result_instance = []
+user_frame_tmp = tk.Frame
+show_instance = 4
 
 
 def show_result(txt: str):
@@ -22,14 +25,13 @@ def show_result(txt: str):
     )
 
 
-def update_user(user, frame=None):
-    if frame is None:
-        pass
-    elif type(user) == Customer:
-        user_name_text = tk.Text(frame, height=2, width=30)
-        user_name_text.insert("1.0", "Name is Akhmet" + "\nStatus")
-        user_name_text.config(state='disabled')
-        user_name_text.grid(row=0, column=0)
+def update_user(user):
+    frame = user_frame_tmp
+    user_name_text = tk.Text(frame, height=2, width=30)
+    user_name_text.insert("1.0", f"Name {user.get_name()}"
+                                 f"\nStatus {user.get_account().get_status()} ")
+    user_name_text.config(state='disabled')
+    user_name_text.grid(row=0, column=0)
 
     global current_user
     current_user = user
@@ -158,7 +160,100 @@ class UserLogin(tk.Frame):
         # ----------------
 
 
+class ToShow(tk.Frame):
+    def __init__(self, show):
+        self.window = tk.Toplevel()
+        self.window.title("Show Info")
+        self.window.resizable(False, False)
+
+        self.frame = tk.Frame(self.window)
+        self.frame.grid(row=0, column=0)
+
+        cinema_hall = show.get_cinema_hall()
+        cinema_hall_seats = cinema_hall.get_cinema_hall_seats()
+        row = cinema_hall.get_total_row()
+        coulomn = cinema_hall.get_total_coulomn()
+
+
+        self.payment_button = tk.Button(self.frame, text="Make Payment")
+        self.payment_button.grid(row=2, column=0)
+
+
+class ShowUi:
+    def __init__(self, show, frame, row):
+        # self.show_scroll = tk.Scrollbar(frame)
+        # self.show_scroll.grid(row=row, column=0)
+
+        # for show in result_dict.values():
+        # self.show_image = tk.PhotoImage(file="Data/Voando-Harry-Potter-PNG-2245377973.png")
+        self.show_label = tk.Label(frame, text="show")
+        self.show_label.grid(row=row, column=0)
+
+        self.show_text = tk.Text(self.show_label, height=1, width=145)
+        self.show_text.insert("1.0", str(show["Title"]) +
+                              " genre: " + str(show["Genre"]) +
+                              " seats: " + str(show['Seat']) +
+                              " day: " + str(show['Date']))
+        self.show_text.config(state='disabled')
+        self.show_text.grid(row=row, column=0)
+        self.show = show
+        self.show_button = tk.Button(self.show_label, text="To Show", command=self.to_show)
+        self.show_button.grid(row=row, column=1)
+
+    def to_show(self):
+        if type(current_user) == Customer:
+            ToShow(self.show)
+
+        elif type(current_user) == Guest:
+            self.window = tk.Toplevel()
+            self.window.title("Info")
+            self.window.resizable(False, False)
+
+            self.frame = tk.Frame(self.window)
+            self.frame.grid(row=0, column=0)
+
+            def login_command():
+                UserLogin()
+                self.window.destroy()
+
+            def sign_in_command():
+                UserSignIn()
+                self.window.destroy()
+
+            def cancel_command():
+                self.window.destroy()
+
+            self.info_text = tk.Text(self.window, width=50, height=2)
+            self.info_text.grid(row=0, column=0)
+            self.info_text.insert("1.0", "            You have not login yet. \n"
+                                         "      Please login or register an account.")
+            self.info_text.config(state="disabled")
+
+            self.button_label = tk.Label(self.window)
+            self.button_label.grid(row=1, column=0)
+
+            # Login Button
+            self.login_button = tk.Button(self.button_label, text="Login", command=login_command)
+            self.login_button.grid(row=1, column=1, padx=50, pady=5)
+
+            # Sign In Button
+            self.sign_in_button = tk.Button(self.button_label, text="Sign In", command=sign_in_command)
+            self.sign_in_button.grid(row=1, column=0, padx=50, pady=5)
+
+            # Cancel Button
+            self.cancel_button = tk.Button(self.button_label, text="Cancel", command=cancel_command)
+            self.cancel_button.grid(row=2, column=0, padx=20, pady=5)
+
+    def delete(self):
+        self.show_text.destroy()
+        self.show_label.destroy()
+        self.show_button.destroy()
+        self.show_text.destroy()
+        # self.show_scroll.destroy()
+
+
 def main():
+    global user_frame_tmp
     window = tk.Tk()
     window.title("Movie Ticket Management System")
     window.resizable(False, False)
@@ -168,6 +263,7 @@ def main():
     # --------------------First Row--------------------
     # Main Frame
     first_frame = tk.LabelFrame(frame, text="")
+    user_frame_tmp = first_frame
     first_frame.grid(row=0, column=0)
 
     # Time and Date
@@ -176,19 +272,22 @@ def main():
     time_text.config(state='disabled')
     time_text.grid(row=0, column=1)
 
+    # User Info
+    user_label = tk.Label(first_frame)
+    user_label.grid(row=0, column=2)
+
     # User Login
     def user_login_command():
         UserLogin()
 
-
-    login_button = tk.Button(first_frame, text="Login", command=user_login_command)
+    login_button = tk.Button(user_label, text="Login", command=user_login_command)
     login_button.grid(row=0, column=2)
 
     # User Sign In
     def user_sign_in_command():
         UserSignIn()
 
-    sign_in_button = tk.Button(first_frame, text="Sign In", command=user_sign_in_command)
+    sign_in_button = tk.Button(user_label, text="Sign In", command=user_sign_in_command)
     sign_in_button.grid(row=1, column=2)
 
     # --------------------Second Row-------------------
@@ -265,12 +364,16 @@ def main():
         # dict_result = movie_catalog.search_by_filter(filter_values)
         # print(dict_result)
         try:
-            if result_instance is not None:
-                result_instance.delete()
+            for instance in result_instance:
+                if instance is not None:
+                    instance.delete()
         except AttributeError:
             print("movie instance not deleted")
             pass
-        result_instance = search_result_ui(result_dict, frame, 2)
+        i = 2
+        for show in result_dict.values():
+            result_instance.append(ShowUi(show, frame, i))
+            i += 1
 
     # Search Button
     search_button = tk.Button(second_frame, text="Search", command=search_by_filter)
