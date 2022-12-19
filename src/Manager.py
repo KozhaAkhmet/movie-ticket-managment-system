@@ -1,0 +1,4 @@
+
+
+global mainWindow
+global wre

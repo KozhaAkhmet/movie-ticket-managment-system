@@ -1,6 +1,6 @@
 from abc import ABC
-from lib.Constants import AccountStatus, Address
 
+from lib.Constants import AccountStatus, Address
 
 # For simplicity, we are not defining getter and setter functions. The reader can
 # assume that all class attributes are private and accessed through their respective
@@ -18,6 +18,9 @@ class Account:
 
     def reset_password(self):
         None
+
+    def get_password(self):
+        return self.__password
 
     def get_user_id(self):
         return self.__user_id
@@ -40,7 +43,7 @@ class Person(ABC):
         self.__account = account
 
     def __str__(self):
-        return str(self.__account.get_status())
+        return str(self.__account.get_user_id())
 
 
 class Customer(Person):
@@ -56,6 +59,14 @@ class Customer(Person):
         self.__email = email
         self.__phone = phone
         self.__account = account
+
+    # def compare_accounts(self,
+    #                      compare_with: Account):
+    #     if (self.__account.get_user_id() == compare_with.get_user_id()) &&
+    #         self.__account.get_password() == compare_with.get_password():
+    #         return True
+    #
+    #     return False
 
     def get_account(self):
         return self.__account
@@ -81,12 +92,3 @@ class Admin(Person):
 class Guest:
     def register_account(self):
         None
-
-
-# def compare_accounts(this: Account,
-#                      compare_to: Account):
-#     if this.get_user_id() == compare_to.get_user_id() &&
-#         :
-#         return True
-#
-#     return False

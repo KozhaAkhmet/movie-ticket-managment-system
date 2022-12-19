@@ -30,7 +30,7 @@ class Search(ABC):
         pass
 
     @abstractmethod
-    def search_by_city(self, city_name: str) -> List[Movie]:
+    def search_by_country(self, country_name: str) -> List[Movie]:
         pass
 
     @abstractmethod
@@ -80,17 +80,17 @@ class Catalog(Search, ABC):
         else:
             self.__movie_release_dates[movie.get_rel_date()] = [movie]
 
-        if movie.get_city() in self.__movie_cities.keys():
-            self.__movie_cities[movie.get_city()].append(movie)
+        if movie.get_country() in self.__movie_cities.keys():
+            self.__movie_cities[movie.get_country()].append(movie)
         else:
-            self.__movie_cities[movie.get_city()] = [movie]
+            self.__movie_cities[movie.get_country()] = [movie]
 
         if movie not in self.__all_movies:
             self.__all_movies.append(movie.to_dict())
 
     def remove_movie(self, movie: Movie):
         del self.__movie_languages[movie.get_language()]
-        del self.__movie_cities[movie.get_city()]
+        del self.__movie_cities[movie.get_country()]
         del self.__movie_titles[movie.get_title()]
         del self.__movie_genres[movie.get_genre()]
         del self.__movie_release_dates[movie.get_rel_date()]
@@ -107,8 +107,8 @@ class Catalog(Search, ABC):
     def search_by_release_date(self, rel_date) -> List[Movie]:
         return self.__movie_release_dates.get(rel_date)
 
-    def search_by_city(self, city_name) -> List[Movie]:
-        return self.__movie_cities.get(city_name)
+    def search_by_country(self, country_name) -> List[Movie]:
+        return self.__movie_cities.get(country_name)
 
     def get_all_movies(self) -> List[Dict]:
         return self.__all_movies

@@ -1,8 +1,11 @@
 import tkinter as tk
+from tkinter.messagebox import showinfo
+
 from lib.People import Account, Customer
 from lib.Constants import AccountStatus
 
 from Data.FakeAccounts import user_list
+from main import update_user
 
 __padx = 13
 __width = 18
@@ -12,8 +15,15 @@ def __cancel_command():
     return "Canceled"
 
 
+
+    def show_result(self, txt: str):
+        showinfo(
+            message=f'{txt}!'
+        )
+
+
 def user_login():
-    window = tk.Tk()
+    window = tk.Toplevel()
     window.title("User Login")
     window.resizable(False, False)
 
@@ -40,13 +50,16 @@ def user_login():
 
     # ---------Buttons
     def login_command():
+        global current_user_login
         tmp_account = Account(name_entry.get(),
                               pwd_entry.get(),
                               AccountStatus.ACTIVE)
         print(name_entry.get() + " pwd " + pwd_entry.get())
 
         for tmp_user in user_list:
-            if tmp_account == tmp_user.get_account():
+            if tmp_account.get_user_id() == tmp_user.get_account().get_user_id() and \
+                    tmp_account.get_password() == tmp_user.get_account().get_password():
+                current_user_login = tmp_user
                 print("found")
             else:
                 print(tmp_user.get_account().get_user_id())
@@ -124,5 +137,5 @@ def user_sign_in():
     cancel_button.grid(row=0, column=0, padx=20, pady=5)
 
     # ----------------
-
+    window.grab_set()
     window.mainloop()
