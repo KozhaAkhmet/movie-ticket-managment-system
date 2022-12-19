@@ -1,11 +1,8 @@
 import datetime
-from typing import List
-from lib.FakeCinema import cinemas_dict
+from Data.FakeCinema import cinemas_dict
 from lib.Catalog import Catalog
 from lib.Movie import Movie, Show
-from lib.Cinema import Cinema, CinemaHall, CinemaHallSeat
 import lib.Customer as Customer
-from lib.Constants import BookingStatus, PaymentStatus, Address, SeatType
 
 # --------------------------Movie Catalog----------------------------------
 movie_catalog = Catalog()
@@ -23,6 +20,8 @@ movie_catalog.add_movie(harry_potter)
 movie_catalog.add_movie(the_end)
 movie_catalog.add_movie(avengers)
 # ---------------------------------------------------------------------------------------------
+
+# -------------------------Show List---------------------------
 tin_cinema = cinemas_dict["Tin Cinema"]
 print(tin_cinema)
 tin_cinema_halls = tin_cinema.get_cinema_halls()
@@ -35,12 +34,6 @@ show_list = [show1.to_dict(),
              show2.to_dict(),
              show3.to_dict()
              ]
+# --------------------------------------------------------------
 
-# The customer
-test_customer = Customer
 
-# Making Booking
-# payment = test_customer.Payment(amount=100, transaction_id=123, payment_status=PaymentStatus.PENDING)
-# test_customer.Booking("123", 2, BookingStatus.CONFIRMED, show1, tin_cinema_halls[0], payment)
-
-# Making payment

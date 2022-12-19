@@ -6,9 +6,9 @@ from lib.Cinema import CinemaHall
 from lib.Movie import Movie, Show
 import pandas as pd
 
-result_filter = 0
-tmp = 0
-i = 0
+__result_filter = 0
+__tmp = 0
+__i = 0
 
 
 class Search(ABC):
@@ -134,26 +134,26 @@ class Catalog(Search, ABC):
 
 
 def search_show_by_filter(show_list: List[Show], filter_values: dict):
-    global result_filter, tmp, i
+    global __result_filter, __tmp, __i
     show_list = pd.DataFrame(show_list)
     print(show_list)
-    i = 0
+    __i = 0
     try:
         for filter_key in filter_values.keys():
             # print(filter_values[filter_key])
             if filter_values[filter_key] != "":
                 if filter_key == "Seat":
-                    result_filter = (show_list[filter_key] >= int(filter_values[filter_key]))
+                    __result_filter = (show_list[filter_key] >= int(filter_values[filter_key]))
                 elif filter_key == "Date":
-                    result_filter = (show_list[filter_key] == int(filter_values[filter_key]))
+                    __result_filter = (show_list[filter_key] == int(filter_values[filter_key]))
                 else:
-                    result_filter = (show_list[filter_key] == filter_values[filter_key])
+                    __result_filter = (show_list[filter_key] == filter_values[filter_key])
 
-                if i != 0:
-                    result_filter = result_filter & tmp
-                i = i + 1
-                tmp = result_filter
-        print(show_list[result_filter].T.to_dict())
-        return show_list[result_filter].T.to_dict()
+                if __i != 0:
+                    __result_filter = __result_filter & __tmp
+                __i = __i + 1
+                __tmp = __result_filter
+        print(show_list[__result_filter].T.to_dict())
+        return show_list[__result_filter].T.to_dict()
     except KeyError:
         return {}

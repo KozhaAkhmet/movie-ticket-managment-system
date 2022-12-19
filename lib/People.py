@@ -9,15 +9,21 @@ from lib.Constants import AccountStatus, Address
 
 class Account:
     def __init__(self,
-                 id: str,
+                 user_id: str,
                  password: str,
                  status: AccountStatus):
-        self.__id = id
+        self.__user_id = user_id
         self.__password = password
         self.__status = status
 
     def reset_password(self):
         None
+
+    def get_user_id(self):
+        return self.__user_id
+
+    def get_status(self):
+        return self.__status
 
 
 class Person(ABC):
@@ -25,16 +31,35 @@ class Person(ABC):
                  name: str,
                  address: Address,
                  email: str,
-                 phone,
-                 account):
+                 phone: str,
+                 account: Account):
         self.__name = name
         self.__address = address
         self.__email = email
         self.__phone = phone
         self.__account = account
 
+    def __str__(self):
+        return str(self.__account.get_status())
+
 
 class Customer(Person):
+    def __init__(self,
+                 name: str,
+                 address: Address,
+                 email: str,
+                 phone: str,
+                 account: Account):
+        super().__init__(name, address, email, phone, account)
+        self.__name = name
+        self.__address = address
+        self.__email = email
+        self.__phone = phone
+        self.__account = account
+
+    def get_account(self):
+        return self.__account
+
     def make_booking(self, booking):
         None
 
@@ -56,3 +81,12 @@ class Admin(Person):
 class Guest:
     def register_account(self):
         None
+
+
+# def compare_accounts(this: Account,
+#                      compare_to: Account):
+#     if this.get_user_id() == compare_to.get_user_id() &&
+#         :
+#         return True
+#
+#     return False

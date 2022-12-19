@@ -3,7 +3,14 @@ import tkinter as tk
 from tkinter.messagebox import showinfo
 
 from lib import Catalog
-from lib.FakeData import show_list, movie_catalog
+from Data.FakeData import show_list
+
+from src.SearchResult import search_result_ui
+from src.User import user_login, user_sign_in
+
+
+# import src.UserLogin as UserLogin
+# import src.UserSignIn as UserSignIn
 
 
 def show_result(txt: str):
@@ -13,38 +20,7 @@ def show_result(txt: str):
 
 
 current_datetime = datetime.datetime(2022, 12, 22, 10, 30)
-movie_instance = 4
-
-
-# TODO time and date UI
-
-class movie_ui:
-    def __init__(self, result_dict, frame):
-        try:
-            if movie_instance is not None:
-                movie_instance.delete()
-        except AttributeError:
-            print("movie instance not deleted")
-            pass
-        i = 0
-        row = 2
-        for movie in result_dict.values():
-            self.movie_label = tk.Label(frame, text="Movie")
-            self.movie_label.grid(row=row + i, column=0)
-
-            self.movie_text = tk.Text(self.movie_label, height=1, width=154)
-            self.movie_text.insert("1.0", str(movie["Title"]) +
-                                   " genre: " + str(movie["Genre"]) +
-                                   " seats: " + str(movie['Seat']) +
-                                   " day: " + str(movie['Date']))
-            self.movie_text.config(state='disabled')
-            self.movie_text.grid(row=row + i, column=0)
-
-            i = i + 1
-
-    def delete(self):
-        self.movie_text.destroy()
-        self.movie_label.destroy()
+result_instance = 4
 
 
 def main():
@@ -58,13 +34,30 @@ def main():
     frame = tk.Frame(window)
     frame.pack()
     # --------------------First Row--------------------
-    first_frame = tk.LabelFrame(frame, text="Time and Date")
+    # Main Frame
+    first_frame = tk.LabelFrame(frame, text="")
     first_frame.grid(row=0, column=0)
 
+    # Time and Date
     time_text = tk.Text(first_frame, height=2, width=30)
     time_text.insert("1.0", "Current Time: " + str(current_datetime.time()) + "\nDate: " + str(current_datetime.date()))
     time_text.config(state='disabled')
-    time_text.grid(row=1, column=0)
+    time_text.grid(row=0, column=0)
+
+    # User Login
+    def user_login_command():
+        user_login()
+
+    login_button = tk.Button(first_frame, text="Login", command=user_login_command)
+    login_button.grid(row=0, column=1)
+
+    # User Sign In
+    def user_sign_in_command():
+        result = user_sign_in()
+        print(result)
+    sign_in_button = tk.Button(first_frame, text="Sign In", command=user_sign_in_command)
+    sign_in_button.grid(row=1, column=1)
+
     # --------------------Second Row-------------------
     # Main Frame
     second_frame = tk.LabelFrame(frame, text="Search Movie")
@@ -121,7 +114,7 @@ def main():
     # --------------------------------------------
 
     def search_by_filter():
-        global movie_instance
+        global result_instance
         # dict = UserSignIn.user_sign_in()
         print("Search pressed!")
 
@@ -138,7 +131,13 @@ def main():
         print(result_dict)
         # dict_result = movie_catalog.search_by_filter(filter_values)
         # print(dict_result)
-        movie_instance = movie_ui(result_dict, frame)
+        try:
+            if result_instance is not None:
+                result_instance.delete()
+        except AttributeError:
+            print("movie instance not deleted")
+            pass
+        result_instance = search_result_ui(result_dict, frame, 2)
 
     # Search Button
     search_button = tk.Button(second_frame, text="Search", command=search_by_filter)
