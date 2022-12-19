@@ -1,92 +1,149 @@
-from lib import Constants
-from lib import Cinema
+import datetime
+import tkinter as tk
+from tkinter.messagebox import showinfo
 
-from lib import Customer
-from lib import Movie
-from lib import People
 from lib import Catalog
+from Data.FakeData import show_list
 
-import tkinter
-from tkinter import ttk
+from src.SearchResult import search_result_ui
+from src.User import user_login, user_sign_in
 
-#TODO Search Method
-def search_by_filter(genre,release_date,language,title,city,date,seat):
-    Catalog.search_by_genre(genre=genre)
-    Catalog.search_by_release_date(rel_date=release_date)
-    Catalog.search_by_language(language=language)
-    Catalog.search_by_title(title=title)
-    Catalog.search_by_city(city_name=city)
-    #Print search output
 
-window = tkinter.Tk()
-window.title("Movie Ticket Management System")
+# import src.UserLogin as UserLogin
+# import src.UserSignIn as UserSignIn
 
-frame = tkinter.Frame(window)
-frame.pack()
 
-#Main Frame
-main_frame = tkinter.LabelFrame(frame, text="Searh Movie")
-main_frame.grid(row=0, column=0, padx=25,pady=10)
+def show_result(txt: str):
+    showinfo(
+        message=f'Result {txt}!'
+    )
 
-#------------Search Bar--------------
 
-#Genre filter 
-genre_label = tkinter.Label(main_frame, text="Genre")
-genre_label.grid(row=0,column=3)
+current_datetime = datetime.datetime(2022, 12, 22, 10, 30)
+result_instance = 4
 
-genre_entry = tkinter.Entry(main_frame)
-genre_entry.grid(row=1, column=3)
-genre_filter_value = genre_entry.get()
 
-#Realese Date filter 
-realese_date_label = tkinter.Label(main_frame, text="Realese Date")
-realese_date_label.grid(row=0,column=4)
+def main():
+    # for movie in movie_catalog.get_all_movies():
+    #     print(movie.title)
+    # print("\n")
+    window = tk.Tk()
+    window.title("Movie Ticket Management System")
+    window.resizable(False, False)
 
-realese_date_entry = tkinter.Entry(main_frame)
-realese_date_entry.grid(row=1, column=4)
-realese_date_filter_value = realese_date_entry.get()
+    frame = tk.Frame(window)
+    frame.pack()
+    # --------------------First Row--------------------
+    # Main Frame
+    first_frame = tk.LabelFrame(frame, text="")
+    first_frame.grid(row=0, column=0)
 
-#Language filter
-language_label = tkinter.Label(main_frame, text="Language")
-language_label.grid(row=0,column=2)
+    # Time and Date
+    time_text = tk.Text(first_frame, height=2, width=30)
+    time_text.insert("1.0", "Current Time: " + str(current_datetime.time()) + "\nDate: " + str(current_datetime.date()))
+    time_text.config(state='disabled')
+    time_text.grid(row=0, column=0)
 
-language_entry = tkinter.Entry(main_frame)
-language_entry.grid(row=1, column=2)
-language_filter_value = language_entry.get()
+    # User Login
+    def user_login_command():
+        user_login()
 
-#Title filter
-title_label = tkinter.Label(main_frame, text="Title")
-title_label.grid(row=0,column=1)
+    login_button = tk.Button(first_frame, text="Login", command=user_login_command)
+    login_button.grid(row=0, column=1)
 
-title_entry = tkinter.Entry(main_frame)
-title_entry.grid(row=1, column=1)
-title_filter_value = title_entry.get()
+    # User Sign In
+    def user_sign_in_command():
+        result = user_sign_in()
+        print(result)
+    sign_in_button = tk.Button(first_frame, text="Sign In", command=user_sign_in_command)
+    sign_in_button.grid(row=1, column=1)
 
-#City filter
-city_label = tkinter.Label(main_frame, text="City")
-city_label.grid(row=0,column=5)
+    # --------------------Second Row-------------------
+    # Main Frame
+    second_frame = tk.LabelFrame(frame, text="Search Movie")
+    second_frame.grid(row=1, column=0, padx=25, pady=10)
+    # Genre filter
+    genre_label = tk.Label(second_frame, text="Genre")
+    genre_label.grid(row=0, column=3)
 
-city_entry = tkinter.Entry(main_frame)
-city_entry.grid(row=1, column=5)
+    genre_entry = tk.Entry(second_frame)
+    genre_entry.grid(row=1, column=3)
 
-#Seat filter
-seat_label = tkinter.Label(main_frame, text="Seat")
-seat_label.grid(row=0,column=6)
+    # Release Date filter
+    release_date_label = tk.Label(second_frame, text="Release Date")
+    release_date_label.grid(row=0, column=4)
 
-seat_entry = tkinter.Entry(main_frame)
-seat_entry.grid(row=1, column=6)
-seat_filter_value = seat_entry.get()
+    release_date_entry = tk.Entry(second_frame)
+    release_date_entry.grid(row=1, column=4)
 
-#Date filter
-date_label = tkinter.Label(main_frame, text="Date")
-date_label.grid(row=0,column=7)
+    # Language filter
+    language_label = tk.Label(second_frame, text="Language")
+    language_label.grid(row=0, column=2)
 
-date_entry = tkinter.Entry(main_frame)
-date_entry.grid(row=1, column=7)
-date_filter_value = date_entry.get()
+    language_entry = tk.Entry(second_frame)
+    language_entry.grid(row=1, column=2)
 
-search_button = tkinter.Button(main_frame,text="Search",command=search_by_filter) 
-search_button.grid(row=1,column=8,)
-#--------------------------------------------
+    # Title filter
+    title_label = tk.Label(second_frame, text="Title")
+    title_label.grid(row=0, column=1)
 
-window.mainloop()
+    title_entry = tk.Entry(second_frame)
+    title_entry.grid(row=1, column=1)
+
+    # City filter
+    city_label = tk.Label(second_frame, text="City")
+    city_label.grid(row=0, column=5)
+
+    city_entry = tk.Entry(second_frame)
+    city_entry.grid(row=1, column=5)
+
+    # Seat filter
+    seat_label = tk.Label(second_frame, text="Seat")
+    seat_label.grid(row=0, column=6)
+
+    seat_entry = tk.Entry(second_frame)
+    seat_entry.grid(row=1, column=6)
+
+    # Date filter
+    date_label = tk.Label(second_frame, text="Date")
+    date_label.grid(row=0, column=7)
+
+    date_entry = tk.Entry(second_frame)
+    date_entry.grid(row=1, column=7)
+
+    # --------------------------------------------
+
+    def search_by_filter():
+        global result_instance
+        # dict = UserSignIn.user_sign_in()
+        print("Search pressed!")
+
+        filter_values = {"Title": title_entry.get(),
+                         "Language": language_entry.get(),
+                         "Genre": genre_entry.get(),
+                         "Rel_date": release_date_entry.get(),
+                         "City": city_entry.get(),
+                         "Seat": seat_entry.get(),
+                         "Date": date_entry.get()
+                         }
+
+        result_dict = Catalog.search_show_by_filter(show_list, filter_values)
+        print(result_dict)
+        # dict_result = movie_catalog.search_by_filter(filter_values)
+        # print(dict_result)
+        try:
+            if result_instance is not None:
+                result_instance.delete()
+        except AttributeError:
+            print("movie instance not deleted")
+            pass
+        result_instance = search_result_ui(result_dict, frame, 2)
+
+    # Search Button
+    search_button = tk.Button(second_frame, text="Search", command=search_by_filter)
+    search_button.grid(row=1, column=8)
+    window.mainloop()
+
+
+if __name__ == '__main__':
+    main()
