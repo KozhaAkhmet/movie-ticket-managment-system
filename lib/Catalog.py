@@ -2,8 +2,13 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import List, Dict
 
-from lib.Movie import Movie
+from lib.Cinema import CinemaHall
+from lib.Movie import Movie, Show
 import pandas as pd
+
+__result_filter = 0
+__tmp = 0
+__i = 0
 
 
 class Search(ABC):
@@ -55,40 +60,40 @@ class Catalog(Search, ABC):
         self.__data_frame: pd.DataFrame = pd.DataFrame()
 
     def add_movie(self, movie: Movie):
-        if movie.language in self.__movie_languages.keys():
-            self.__movie_languages[movie.language].append(movie)
+        if movie.get_language() in self.__movie_languages.keys():
+            self.__movie_languages[movie.get_language()].append(movie)
         else:
-            self.__movie_languages[movie.language] = [movie]
+            self.__movie_languages[movie.get_language()] = [movie]
 
-        if movie.title in self.__movie_titles.keys():
-            self.__movie_titles[movie.title].append(movie)
+        if movie.get_title() in self.__movie_titles.keys():
+            self.__movie_titles[movie.get_title()].append(movie)
         else:
-            self.__movie_titles[movie.title] = [movie]
+            self.__movie_titles[movie.get_title()] = [movie]
 
-        if movie.genre in self.__movie_genres.keys():
-            self.__movie_genres[movie.genre].append(movie)
+        if movie.get_genre() in self.__movie_genres.keys():
+            self.__movie_genres[movie.get_genre()].append(movie)
         else:
-            self.__movie_genres[movie.genre] = [movie]
+            self.__movie_genres[movie.get_genre()] = [movie]
 
-        if movie.release_date in self.__movie_release_dates.keys():
-            self.__movie_release_dates[movie.release_date].append(movie)
+        if movie.get_rel_date() in self.__movie_release_dates.keys():
+            self.__movie_release_dates[movie.get_rel_date()].append(movie)
         else:
-            self.__movie_release_dates[movie.release_date] = [movie]
+            self.__movie_release_dates[movie.get_rel_date()] = [movie]
 
-        if movie.city in self.__movie_cities.keys():
-            self.__movie_cities[movie.city].append(movie)
+        if movie.get_city() in self.__movie_cities.keys():
+            self.__movie_cities[movie.get_city()].append(movie)
         else:
-            self.__movie_cities[movie.city] = [movie]
+            self.__movie_cities[movie.get_city()] = [movie]
 
         if movie not in self.__all_movies:
             self.__all_movies.append(movie.to_dict())
 
     def remove_movie(self, movie: Movie):
-        del self.__movie_languages[movie.language]
-        del self.__movie_cities[movie.city]
-        del self.__movie_titles[movie.title]
-        del self.__movie_genres[movie.genre]
-        del self.__movie_release_dates[movie.release_date]
+        del self.__movie_languages[movie.get_language()]
+        del self.__movie_cities[movie.get_city()]
+        del self.__movie_titles[movie.get_title()]
+        del self.__movie_genres[movie.get_genre()]
+        del self.__movie_release_dates[movie.get_rel_date()]
 
     def search_by_title(self, title) -> List[Movie]:
         return self.__movie_titles.get(title)
@@ -111,14 +116,44 @@ class Catalog(Search, ABC):
     def search_by_filter(self, filter_values: dict):
         global result_filter, tmp, i
         all_movie_df = pd.DataFrame(self.__all_movies)
-
+        print(all_movie_df)
         i = 0
-        for filter_key in filter_values.keys():
-            if filter_values[filter_key] is not None:
-                result_filter = (all_movie_df[filter_key] == filter_values[filter_key])
-                if i != 0:
-                    result_filter = result_filter & tmp
-                i = i + 1
-                tmp = result_filter
+        try:
+            for filter_key in filter_values.keys():
+                # print(filter_values[filter_key])
+                if filter_values[filter_key] != "":
+                    result_filter = (all_movie_df[filter_key] == filter_values[filter_key])
+                    if i != 0:
+                        result_filter = result_filter & tmp
+                    i = i + 1
+                    tmp = result_filter
 
-        return all_movie_df[result_filter].T.to_dict()
+            return all_movie_df[result_filter].T.to_dict()
+        except KeyError:
+            return {}
+
+
+def search_show_by_filter(show_list: List[Show], filter_values: dict):
+    global __result_filter, __tmp, __i
+    show_list = pd.DataFrame(show_list)
+    print(show_list)
+    __i = 0
+    try:
+        for filter_key in filter_values.keys():
+            # print(filter_values[filter_key])
+            if filter_values[filter_key] != "":
+                if filter_key == "Seat":
+                    __result_filter = (show_list[filter_key] >= int(filter_values[filter_key]))
+                elif filter_key == "Date":
+                    __result_filter = (show_list[filter_key] == int(filter_values[filter_key]))
+                else:
+                    __result_filter = (show_list[filter_key] == filter_values[filter_key])
+
+                if __i != 0:
+                    __result_filter = __result_filter & __tmp
+                __i = __i + 1
+                __tmp = __result_filter
+        print(show_list[__result_filter].T.to_dict())
+        return show_list[__result_filter].T.to_dict()
+    except KeyError:
+        return {}
