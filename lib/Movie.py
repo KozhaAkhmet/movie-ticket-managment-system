@@ -13,7 +13,7 @@ class Movie:
                  duration_in_mins: int,
                  language: str,
                  release_date: datetime,
-                 city: str,
+                 country: str,
                  genre: str,
                  added_by: Admin,
                  image: str):
@@ -23,7 +23,7 @@ class Movie:
         self.__duration_in_mins = duration_in_mins
         self.__language = language
         self.__release_date = release_date
-        self.__city = city
+        self.__country = country  # Turkey
         self.__genre = genre
         self.__movie_added_by = added_by
         self.__shows = []
@@ -40,8 +40,8 @@ class Movie:
     def get_genre(self):
         return self.__genre
 
-    def get_city(self):
-        return self.__city
+    def get_country(self):
+        return self.__country
 
     def get_duration(self):
         return self.__duration_in_mins
@@ -50,7 +50,7 @@ class Movie:
         tmp_dict = {'Title': self.__title,
                     'Language': self.__language,
                     "Rel_date": self.__release_date,
-                    "City": self.__city,
+                    "Country": self.__country,
                     "Genre": self.get_genre()}
         return tmp_dict
 
@@ -80,7 +80,7 @@ class Show:
                     'Title': self.__movie.get_title(),
                     'Language': self.__movie.get_language(),
                     "Rel_date": self.__movie.get_rel_date(),
-                    "City": self.__movie.get_city(),
+                    "Country": self.__movie.get_country(),
                     "Genre": self.__movie.get_genre(),
                     "Date": self.__start_time.date().day}
         return tmp_dict
