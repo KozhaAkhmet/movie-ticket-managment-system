@@ -3,7 +3,7 @@ from typing import List
 
 from lib.Cinema import CinemaHallSeat
 from lib.Constants import BookingStatus, PaymentStatus, SeatType
-from lib.Movie import Show
+# from lib.Movie import Show
 import lib.Constants as Constants
 
 
@@ -18,6 +18,9 @@ class ShowSeat(CinemaHallSeat):
         self.__show_seat_number = seat_id
         self.__is_reserved = is_reserved
         self.__price = price
+
+    def get_price(self):
+        return self.__price
 
     def print(self):
         return f"Row: {super().get_seat_row()}  Coulomn: {super().get_seat_coulomn()}  " \
@@ -34,13 +37,16 @@ class Payment:
         self.__transaction_id = transaction_id
         self.__status = payment_status
 
+    def set_status(self, status):
+        self.__status = status
+
 
 class Booking:
     def __init__(self, booking_number: str,
                  number_of_seats: int,
                  status: BookingStatus,
-                 show: Show,
-                 show_seats: ShowSeat,
+                 show,
+                 show_seats: List[ShowSeat],
                  payment: Payment):
         self.__booking_number = booking_number
         self.__number_of_seats = number_of_seats
@@ -50,11 +56,14 @@ class Booking:
         self.__seats = show_seats
         self.__payment = payment
 
+    def set_status(self, status):
+        self.__status = status
+
     def make_payment(self, payment: Payment):
         pass
 
     def cancel(self):
         None
 
-    def assign_seats(self, seats):
+    def assign_seats(self, seats: List[ShowSeat]):
         None

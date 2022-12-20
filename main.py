@@ -7,12 +7,12 @@ from typing import List
 from lib.Cinema import CinemaHall, CinemaHallSeat
 from lib import Catalog
 from lib.People import Guest, Account, Customer
-from lib.Constants import AccountStatus, SeatType, Address
-from lib.Customer import ShowSeat
+from lib.Constants import AccountStatus, SeatType, Address, PaymentStatus, BookingStatus
+from lib.Customer import ShowSeat, Payment, Booking
 from lib.Utility import control_str
 # from src.SearchResult import search_result_ui
 
-from Data.FakeData import show_list
+from Data.FakeData import show_list, booking_list
 from Data.FakeAccounts import user_list
 
 current_user = Guest()
@@ -23,10 +23,33 @@ show_instance = 4
 selected = []
 
 
-def show_result(txt: str):
-    showinfo(
-        message=f'Result {txt}!'
-    )
+class BookingUI:
+    def __init__(self, booking, frame, row):
+        self.booking_label = tk.Label(frame, text="Booking")
+        self.booking_label.grid(row=row, column=0)
+
+        self.booking_text = tk.Text(self.show_label, height=1, width=145)
+        self.booking_text.insert("1.0", str(show["Title"]) +
+                                 " genre: " + str(show["Genre"]) +
+                                 " seats: " + str(show['Seat']) +
+                                 " day: " + str(show['Date']))
+        self.booking_text.config(state='disabled')
+        self.booking_text.grid(row=row, column=0)
+
+        self.booking_button = tk.Button(self.booking_label, text="To Show", )
+        self.booking_button.grid(row=row, column=1)
+
+
+class ViewBookings(tk.Frame):
+    def __init__(self, bookings):
+        self.window = tk.Toplevel()
+        self.window.title("Bookings")
+        self.window.resizable(False, False)
+
+        i = 0
+        for booking in bookings:
+            BookingUI(booking, self.window, i)
+            i += 1
 
 
 def update_user(user):
@@ -37,22 +60,106 @@ def update_user(user):
     user_name_text.config(state='disabled')
     user_name_text.grid(row=0, column=0)
 
+    def view_bookings():
+        bookings = user.get_bookings()
+
+    user_booking_button = tk.Button(frame, text="View Booking", command=view_bookings)
+    user_booking_button.grid(row=1, column=0)
     global current_user
     current_user = user
     print(current_user)
 
 
-class MakePayment(tk.Frame):
-    def __init__(self):
+class MakeBooking(tk.Frame):
+    def __init__(self, show):
+        global selected
+
+        amount = 0
+        for select in selected:
+            amount += select.get_price()
+
         self.window = tk.Toplevel()
         self.window.title("Payment Window")
         self.window.resizable(False, False)
 
-        self.frame = tk.Frame(self.window)
-        self.frame.grid(row=0, column=0)
+        # First Frame
+        self.payment_label_frame = tk.LabelFrame(self.window, text="Payment")
+        self.payment_label_frame.grid(row=0, column=0, padx=15, pady=10)
 
-        self.name_entry = tk.Entry(self.window)
-        self.name_entry.grid(row=0, column=0)
+        # Card Name
+        self.payment_name_label = tk.Label(self.payment_label_frame, text="Card Name")
+        self.payment_name_label.grid(row=0, column=0)
+
+        self.payment_name_entry = tk.Entry(self.payment_label_frame)
+        self.payment_name_entry.grid(row=1, column=0)
+
+        # Card Number
+        self.payment_card_number = tk.Label(self.payment_label_frame, text="Card Number")
+        self.payment_card_number.grid(row=2, column=0)
+
+        self.payment_card_number_entry = tk.Entry(self.payment_label_frame)
+        self.payment_card_number_entry.grid(row=3, column=0)
+
+        # Card CSV
+        self.payment_card_csv_label = tk.Label(self.payment_label_frame, text="CSV")
+        self.payment_card_csv_label.grid(row=4, column=0)
+
+        self.payment_card_csv_entry = tk.Entry(self.payment_label_frame)
+        self.payment_card_csv_entry.grid(row=5, column=0)
+
+        # Second Frame
+
+        self.details_label_frame = tk.LabelFrame(self.window, text="Booking Details")
+        self.details_label_frame.grid(row=0, column=1)
+
+        self.show_text = tk.Text(self.details_label_frame, height=4, width=20)
+        self.show_text.insert("1.0", "Show: " + str(show["Title"]) +
+                              "\nDate: " + str(show["Date"]) +
+                              "\nPlayed at: " + show["Played_at"].get_name() +
+                              "\nTotal Amount: " + str(amount) +
+                              "")
+        self.show_text.config(state="disabled")
+        self.show_text.grid(row=0, column=0)
+
+        # self.amount_text = tk.Text(self.details_label_frame)
+        # self.amount_text.insert("1.0", "Total Amount: " + str(amount))
+        # self.amount_text.config(state="disabled")
+        # self.amount_text.grid(row=2, column=0)
+
+        def confirm_command():
+            tmp_payment = Payment(amount, datetime.time.hour, PaymentStatus.PENDING)
+            tmp_booking = Booking(str(datetime.date.today()),
+                                  len(selected),
+                                  BookingStatus.PENDING,
+                                  show,
+                                  selected,
+                                  tmp_payment
+                                  )
+            current_user.make_booking(tmp_booking)
+            booking_list.append(tmp_booking)
+            print(current_user.get_bookings())
+
+            # Confirming if booking exist
+            test_bookings = current_user.get_bookings()
+            for test_booking in test_bookings:
+                for booking in booking_list:
+                    if test_booking == booking:
+                        showinfo(message="Thank you for using our platform")
+                        tmp_payment.set_status(PaymentStatus.COMPLETED)
+                        tmp_booking.set_status(BookingStatus.CONFIRMED)
+                        for seat in selected:
+                            seat.set_seat_type(SeatType.REGULAR)
+
+        self.confirm_button = tk.Button(self.window, text="Confirm", command=confirm_command)
+        self.confirm_button.grid(row=6, column=1, pady=10)
+
+        self.cancel_button = tk.Button(self.window, text="Cancel", command=self.window.destroy)
+        self.cancel_button.grid(row=6, column=0, pady=10)
+
+        def disable_event():
+            pass
+
+        self.window.protocol("WM_DELETE_WINDOW", disable_event)
 
 
 class UserSignIn(tk.Frame):
@@ -176,6 +283,10 @@ class UserSignIn(tk.Frame):
         self.cancel_button.grid(row=0, column=0, padx=20, pady=5)
 
         # ----------------
+        def disable_event():
+            pass
+
+        self.window.protocol("WM_DELETE_WINDOW", disable_event)
 
 
 class UserLogin(tk.Frame):
@@ -237,15 +348,24 @@ class UserLogin(tk.Frame):
 
         # ----------------
 
+        def disable_event():
+            pass
+
+        self.window.protocol("WM_DELETE_WINDOW", disable_event)
+
 
 class SeatButton:
     def __init__(self, frame, row, coulomn, show_seat: ShowSeat):
         global selected
 
         def selected_seat():
-            for select in selected:
-                pass
-            selected.append([show_seat])
+            if show_seat in selected:
+                self.tmp_button.config(bg="green")
+                selected.remove(show_seat)
+                print("Already included. Selected seat removed")
+                return 0
+            self.tmp_button.config(bg="blue")
+            selected.append(show_seat)
 
         self.tmp_button = tk.Button(frame, text="ロ", width=1, command=selected_seat)
         self.tmp_button.grid(row=row, column=coulomn)
@@ -304,19 +424,28 @@ class ToShow(tk.Frame):
         def make_payment():
             global selected
             for select in selected:
-                print(str(select[0].print()))
-            MakePayment()
+                print(str(select.print()))
+
+            if len(selected) == 0:
+                showinfo(message="You have not selected any seat")
+                return
+            MakeBooking(show)
 
         def cancel_command():
             global selected
             selected = []
             self.window.destroy()
 
-        self.payment_button = tk.Button(self.label3, text="Make Payment", command=make_payment)
-        self.payment_button.grid(row=0, column=0)
+        self.payment_button = tk.Button(self.window, text="Make Payment", command=make_payment)
+        self.payment_button.grid(row=5, column=1, pady=10)
 
-        self.cancel_button = tk.Button(self.label3, text="Cancel", command=cancel_command)
-        self.cancel_button.grid(row=1, column=0)
+        self.cancel_button = tk.Button(self.window, text="Cancel", command=cancel_command)
+        self.cancel_button.grid(row=5, column=0, pady=10)
+
+        def disable_event():
+            pass
+
+        self.window.protocol("WM_DELETE_WINDOW", disable_event)
 
 
 class ShowUi:
@@ -345,45 +474,44 @@ class ShowUi:
             ToShow(self.show)
 
         elif type(current_user) == Guest:
-            ToShow(self.show)
-            # self.window = tk.Toplevel()
-            # self.window.title("Info")
-            # self.window.resizable(False, False)
-            #
-            # self.frame = tk.Frame(self.window)
-            # self.frame.grid(row=0, column=0)
-            #
-            # def login_command():
-            #     UserLogin()
-            #     self.window.destroy()
-            #
-            # def sign_in_command():
-            #     UserSignIn()
-            #     self.window.destroy()
-            #
-            # def cancel_command():
-            #     self.window.destroy()
-            #
-            # self.info_text = tk.Text(self.window, width=50, height=2)
-            # self.info_text.grid(row=0, column=0)
-            # self.info_text.insert("1.0", "            You have not login yet. \n"
-            #                              "      Please login or register an account.")
-            # self.info_text.config(state="disabled")
-            #
-            # self.button_label = tk.Label(self.window)
-            # self.button_label.grid(row=1, column=0)
-            #
-            # # Login Button
-            # self.login_button = tk.Button(self.button_label, text="Login", command=login_command)
-            # self.login_button.grid(row=1, column=1, padx=50, pady=5)
-            #
-            # # Sign In Button
-            # self.sign_in_button = tk.Button(self.button_label, text="Sign In", command=sign_in_command)
-            # self.sign_in_button.grid(row=1, column=0, padx=50, pady=5)
-            #
-            # # Cancel Button
-            # self.cancel_button = tk.Button(self.button_label, text="Cancel", command=cancel_command)
-            # self.cancel_button.grid(row=2, column=0, padx=20, pady=5)
+            self.window = tk.Toplevel()
+            self.window.title("Info")
+            self.window.resizable(False, False)
+
+            self.frame = tk.Frame(self.window)
+            self.frame.grid(row=0, column=0)
+
+            def login_command():
+                UserLogin()
+                self.window.destroy()
+
+            def sign_in_command():
+                UserSignIn()
+                self.window.destroy()
+
+            def cancel_command():
+                self.window.destroy()
+
+            self.info_text = tk.Text(self.window, width=50, height=2)
+            self.info_text.grid(row=0, column=0)
+            self.info_text.insert("1.0", "            You have not login yet. \n"
+                                         "      Please login or register an account.")
+            self.info_text.config(state="disabled")
+
+            self.button_label = tk.Label(self.window)
+            self.button_label.grid(row=1, column=0)
+
+            # Login Button
+            self.login_button = tk.Button(self.button_label, text="Login", command=login_command)
+            self.login_button.grid(row=1, column=1, padx=50, pady=5)
+
+            # Sign In Button
+            self.sign_in_button = tk.Button(self.button_label, text="Sign In", command=sign_in_command)
+            self.sign_in_button.grid(row=1, column=0, padx=50, pady=5)
+
+            # Cancel Button
+            self.cancel_button = tk.Button(self.button_label, text="Cancel", command=cancel_command)
+            self.cancel_button.grid(row=2, column=0, padx=20, pady=5)
 
     def delete(self):
         self.show_text.destroy()
@@ -519,6 +647,7 @@ def main():
     # Search Button
     search_button = tk.Button(second_frame, text="Search", command=search_by_filter)
     search_button.grid(row=1, column=8)
+
     window.mainloop()
 
 

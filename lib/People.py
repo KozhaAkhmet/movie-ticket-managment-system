@@ -1,7 +1,7 @@
 from abc import ABC
 
 from lib.Constants import AccountStatus, Address
-
+from lib.Customer import Booking
 # For simplicity, we are not defining getter and setter functions. The reader can
 # assume that all class attributes are private and accessed through their respective
 # public getter methods and modified only through their public methods function.
@@ -75,8 +75,8 @@ class Customer(Person):
     def get_account(self):
         return self.__account
 
-    def make_booking(self, booking):
-        None
+    def make_booking(self, booking: Booking):
+        self.__bookings.append(booking)
 
     def get_bookings(self):
         return self.__bookings

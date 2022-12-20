@@ -50,6 +50,9 @@ class CinemaHall:
         self.__total_coulomn = total_coulomn
         self.__cinema_halls_seats = cinema_halls_seats
 
+    def get_name(self):
+        return f"Hall '{self.__name}'"
+
     def get_total_sets(self):
         return self.__total_seats
 
