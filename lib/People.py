@@ -81,6 +81,9 @@ class Customer(Person):
     def get_bookings(self):
         return self.__bookings
 
+    def cancel_booking(self, booking):
+        self.__bookings.remove(booking)
+
 
 class Admin(Person):
     def add_movie(self, movie):

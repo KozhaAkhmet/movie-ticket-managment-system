@@ -28,15 +28,22 @@ class BookingUI:
         self.booking_label = tk.Label(frame, text="Booking")
         self.booking_label.grid(row=row, column=0)
 
-        self.booking_text = tk.Text(self.show_label, height=1, width=145)
-        self.booking_text.insert("1.0", str(show["Title"]) +
-                                 " genre: " + str(show["Genre"]) +
-                                 " seats: " + str(show['Seat']) +
-                                 " day: " + str(show['Date']))
+        self.booking_text = tk.Text(self.booking_label, height=5, width=50)
+        self.booking_text.insert("1.0",
+                                 " Date: " + str(booking.get_date()) +
+                                 "\n Booking Number: " + str(booking.get_booking_number()) +
+                                 "\n Number of seats: " + str(booking.get_nuber_of_seats()) +
+                                 "\n Show:" + str(booking.get_show()['Title']) +
+                                 "\n Price: " + str(booking.get_price()))
         self.booking_text.config(state='disabled')
         self.booking_text.grid(row=row, column=0)
 
-        self.booking_button = tk.Button(self.booking_label, text="To Show", )
+        def cancel_booking():
+            self.booking_label.destroy()
+            current_user.cancel_booking(booking)
+            booking_list.remove(booking)
+
+        self.booking_button = tk.Button(self.booking_label, text="Cancel Booking", command=cancel_booking)
         self.booking_button.grid(row=row, column=1)
 
 
@@ -46,10 +53,24 @@ class ViewBookings(tk.Frame):
         self.window.title("Bookings")
         self.window.resizable(False, False)
 
+
         i = 0
-        for booking in bookings:
-            BookingUI(booking, self.window, i)
-            i += 1
+        if len(bookings) == 0:
+            self.window.destroy()
+            showinfo(message="No bookings")
+            return
+        else:
+            for booking in bookings:
+                BookingUI(booking, self.window, i)
+                i += 1
+
+            self.back_button = tk.Button(self.window, text="Back", command=self.window.destroy)
+            self.back_button.grid(row=i + 1, column=0)
+
+        def disable_event():
+            pass
+
+        self.window.protocol("WM_DELETE_WINDOW", disable_event)
 
 
 def update_user(user):
@@ -61,7 +82,7 @@ def update_user(user):
     user_name_text.grid(row=0, column=0)
 
     def view_bookings():
-        bookings = user.get_bookings()
+        ViewBookings(user.get_bookings())
 
     user_booking_button = tk.Button(frame, text="View Booking", command=view_bookings)
     user_booking_button.grid(row=1, column=0)
@@ -121,12 +142,17 @@ class MakeBooking(tk.Frame):
         self.show_text.config(state="disabled")
         self.show_text.grid(row=0, column=0)
 
-        # self.amount_text = tk.Text(self.details_label_frame)
-        # self.amount_text.insert("1.0", "Total Amount: " + str(amount))
-        # self.amount_text.config(state="disabled")
-        # self.amount_text.grid(row=2, column=0)
-
         def confirm_command():
+            values = [self.payment_name_entry.get(),
+                      self.payment_card_csv_entry.get(),
+                      self.payment_card_number_entry.get()]
+            for value in values:
+                if value == "":
+                    showinfo(message="You need to fill all entries")
+                    return
+
+            # Making payment at background..................
+
             tmp_payment = Payment(amount, datetime.time.hour, PaymentStatus.PENDING)
             tmp_booking = Booking(str(datetime.date.today()),
                                   len(selected),
@@ -144,6 +170,7 @@ class MakeBooking(tk.Frame):
             for test_booking in test_bookings:
                 for booking in booking_list:
                     if test_booking == booking:
+                        self.window.destroy()
                         showinfo(message="Thank you for using our platform")
                         tmp_payment.set_status(PaymentStatus.COMPLETED)
                         tmp_booking.set_status(BookingStatus.CONFIRMED)
@@ -427,8 +454,9 @@ class ToShow(tk.Frame):
                 print(str(select.print()))
 
             if len(selected) == 0:
-                showinfo(message="You have not selected any seat")
+                showinfo(message="You have not selected any seat yet")
                 return
+            self.window.destroy()
             MakeBooking(show)
 
         def cancel_command():

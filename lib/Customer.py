@@ -40,6 +40,9 @@ class Payment:
     def set_status(self, status):
         self.__status = status
 
+    def get_amount(self):
+        return self.__amount
+
 
 class Booking:
     def __init__(self, booking_number: str,
@@ -63,7 +66,22 @@ class Booking:
         pass
 
     def cancel(self):
-        None
+        del self
 
     def assign_seats(self, seats: List[ShowSeat]):
         None
+
+    def get_date(self):
+        return self.__created_on
+
+    def get_booking_number(self):
+        return self.__booking_number
+
+    def get_nuber_of_seats(self):
+        return self.__number_of_seats
+
+    def get_show(self):
+        return self.__show
+
+    def get_price(self):
+        return self.__payment.get_amount()
