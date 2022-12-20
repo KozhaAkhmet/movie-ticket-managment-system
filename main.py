@@ -1,12 +1,15 @@
 import datetime
 import tkinter as tk
+from tkinter.ttk import *
 from tkinter.messagebox import showinfo
+from typing import List
 
-from lib.Cinema import CinemaHall
+from lib.Cinema import CinemaHall, CinemaHallSeat
 from lib import Catalog
 from lib.People import Guest, Account, Customer
-from lib.Constants import AccountStatus
-
+from lib.Constants import AccountStatus, SeatType, Address
+from lib.Customer import ShowSeat
+from lib.Utility import control_str
 # from src.SearchResult import search_result_ui
 
 from Data.FakeData import show_list
@@ -17,6 +20,7 @@ current_datetime = datetime.datetime(2022, 12, 22, 10, 30)
 result_instance = []
 user_frame_tmp = tk.Frame
 show_instance = 4
+selected = []
 
 
 def show_result(txt: str):
@@ -38,6 +42,19 @@ def update_user(user):
     print(current_user)
 
 
+class MakePayment(tk.Frame):
+    def __init__(self):
+        self.window = tk.Toplevel()
+        self.window.title("Payment Window")
+        self.window.resizable(False, False)
+
+        self.frame = tk.Frame(self.window)
+        self.frame.grid(row=0, column=0)
+
+        self.name_entry = tk.Entry(self.window)
+        self.name_entry.grid(row=0, column=0)
+
+
 class UserSignIn(tk.Frame):
     def __init__(self):
         self.window = tk.Toplevel()
@@ -45,18 +62,48 @@ class UserSignIn(tk.Frame):
         self.window.resizable(False, False)
 
         self.frame = tk.Frame(self.window)
-        self.frame.pack()
+        self.frame.grid(row=0, column=0)
 
-        # Main Frame
+        # First LabelFrame
+
+        self.user_detail_label_frame = tk.LabelFrame(self.frame, text="User Detail")
+        self.user_detail_label_frame.grid(row=0, column=1, padx=15, pady=10)
+
+        self.user_name_label = tk.Label(self.user_detail_label_frame, text="Name")
+        self.user_name_label.grid(row=0, column=0)
+
+        self.user_name_entry = tk.Entry(self.user_detail_label_frame)
+        self.user_name_entry.grid(row=1, column=0)
+
+        self.user_email_label = tk.Label(self.user_detail_label_frame, text="Email")
+        self.user_email_label.grid(row=2, column=0)
+
+        self.user_email_entry = tk.Entry(self.user_detail_label_frame)
+        self.user_email_entry.grid(row=3, column=0)
+
+        self.user_phone_label = tk.Label(self.user_detail_label_frame, text="Phone Number")
+        self.user_phone_label.grid(row=4, column=0)
+
+        self.user_phone_entry = tk.Entry(self.user_detail_label_frame)
+        self.user_phone_entry.grid(row=5, column=0)
+
+        self.user_address_label = tk.Label(self.user_detail_label_frame, text="Address")
+        self.user_address_label.grid(row=6, column=0)
+
+        self.address_entry = tk.Entry(self.user_detail_label_frame)
+        self.address_entry.grid(row=7, column=0)
+
+        # Second LabelFrame
+
         self.main_frame = tk.LabelFrame(self.frame, text="User Sign In")
-        self.main_frame.grid(row=0, column=0, padx=15, pady=10)
+        self.main_frame.grid(row=0, column=2, padx=15, pady=10)
 
         # Name
-        self.name_label = tk.Label(self.main_frame, text="Nickname")
-        self.name_label.grid(row=0, column=0)
+        self.nickname_label = tk.Label(self.main_frame, text="Nickname")
+        self.nickname_label.grid(row=0, column=0)
 
-        self.name_entry = tk.Entry(self.main_frame, width=17)
-        self.name_entry.grid(row=1, column=0, padx=13)
+        self.nickname_entry = tk.Entry(self.main_frame, width=17)
+        self.nickname_entry.grid(row=1, column=0, padx=13)
 
         # Password
         self.pwd_label = tk.Label(self.main_frame, text="Password")
@@ -74,14 +121,48 @@ class UserSignIn(tk.Frame):
 
         # ---------Buttons
         def sign_in_command():
-            Account(self.name_entry.get(),
-                    self.pwd_entry.get(),
-                    AccountStatus.ACTIVE)
+            values = [self.nickname_entry.get(),
+                      self.pwd_entry.get(),
+                      self.address_entry.get().split(","),
+                      self.user_name_entry.get(),
+                      self.user_phone_entry.get(),
+                      ]
+            control = False
+            for value in values:
+                if value == "":
+                    showinfo(message="You need to fill all entries")
+                    return
+            if self.pwd_entry.get() != self.pwd_retry_entry.get():
+                showinfo(message="Password not match")
+                return
+            else:
+                control = True
 
-            return
+            try:
+                if control is True:
+                    tmp_account = Account(self.nickname_entry.get(),
+                                          self.pwd_entry.get(),
+                                          AccountStatus.ACTIVE)
+                    address_str = self.address_entry.get().split(",")
+                    tmp_address = Address(address_str[0],
+                                          address_str[1],
+                                          address_str[2],
+                                          address_str[3],
+                                          address_str[4]
+                                          )
+                    tmp_customer = Customer(control_str(self.user_name_entry.get()),
+                                            tmp_address,
+                                            control_str(self.user_email_entry.get()),
+                                            control_str(self.user_phone_entry.get()),
+                                            tmp_account)
 
-        def cancel_command():
-            self.window.destroy()
+                    user_list.append(tmp_customer)
+
+                    if tmp_customer in user_list:
+                        print(tmp_customer)
+                        self.window.destroy()
+            except:
+                showinfo("Error", " Error Occurred")
 
         self.button_label = tk.Label(self.main_frame)
         self.button_label.grid(row=6, column=0)
@@ -91,7 +172,7 @@ class UserSignIn(tk.Frame):
         self.sign_in_button.grid(row=0, column=1, padx=20, pady=5)
 
         # Cancel Button
-        self.cancel_button = tk.Button(self.button_label, text="Cancel", command=cancel_command)
+        self.cancel_button = tk.Button(self.button_label, text="Cancel", command=self.window.destroy)
         self.cancel_button.grid(row=0, column=0, padx=20, pady=5)
 
         # ----------------
@@ -143,9 +224,6 @@ class UserLogin(tk.Frame):
 
             return
 
-        def cancel_command():
-            self.window.destroy()
-
         self.button_label = tk.Label(self.main_frame)
         self.button_label.grid(row=4, column=0)
 
@@ -154,10 +232,31 @@ class UserLogin(tk.Frame):
         self.login_button.grid(row=4, column=1, padx=20, pady=5)
 
         # Cancel Button
-        self.cancel_button = tk.Button(self.button_label, text="Cancel", command=cancel_command)
+        self.cancel_button = tk.Button(self.button_label, text="Cancel", command=self.window.destroy)
         self.cancel_button.grid(row=4, column=0, padx=20, pady=5)
 
         # ----------------
+
+
+class SeatButton:
+    def __init__(self, frame, row, coulomn, show_seat: ShowSeat):
+        global selected
+
+        def selected_seat():
+            for select in selected:
+                pass
+            selected.append([show_seat])
+
+        self.tmp_button = tk.Button(frame, text="ロ", width=1, command=selected_seat)
+        self.tmp_button.grid(row=row, column=coulomn)
+
+        if show_seat.get_seat_type() == SeatType.REGULAR or \
+                show_seat.get_seat_type() == SeatType.PREMIUM:
+
+            self.tmp_button.config(state="disabled")
+            self.tmp_button.config(bg="grey")
+        else:
+            self.tmp_button.config(bg="green")
 
 
 class ToShow(tk.Frame):
@@ -165,18 +264,59 @@ class ToShow(tk.Frame):
         self.window = tk.Toplevel()
         self.window.title("Show Info")
         self.window.resizable(False, False)
+        # LabelFrame 1
+        self.label = tk.LabelFrame(self.window, text="Cinema Details")
+        self.label.grid(row=0, column=0)
 
-        self.frame = tk.Frame(self.window)
-        self.frame.grid(row=0, column=0)
+        self.cinema_detail_txt = tk.Text(self.label, height=10, width=30)
+        self.cinema_detail_txt.insert("1.0", " Show:" + show["Title"])
+        self.cinema_detail_txt.config(state="disabled")
+        self.cinema_detail_txt.grid(row=0, column=0)
 
-        cinema_hall = show.get_cinema_hall()
+        # Label 2
+        self.label2 = tk.LabelFrame(self.window, text="Select seats")
+        self.label2.grid(row=0, column=1)
+
+        cinema_hall = show["Played_at"]
         cinema_hall_seats = cinema_hall.get_cinema_hall_seats()
         row = cinema_hall.get_total_row()
         coulomn = cinema_hall.get_total_coulomn()
 
+        self.cinema_panel_text = tk.Text(self.label2, height=1, width=20)
+        self.cinema_panel_text.insert("1.0", "   Cinema Monitor")
+        self.cinema_panel_text.config(state="disabled")
+        self.cinema_panel_text.grid(row=0, column=0)
 
-        self.payment_button = tk.Button(self.frame, text="Make Payment")
-        self.payment_button.grid(row=2, column=0)
+        self.seat_button_label = tk.Label(self.label2)
+        self.seat_button_label.grid(row=1, column=0, padx=10, pady=20)
+
+        for i in range(0, coulomn):
+            for j in range(0, row):
+                for show_seat in cinema_hall_seats:
+                    if show_seat.get_seat_row() == j and \
+                            show_seat.get_seat_coulomn() == i:
+                        SeatButton(self.seat_button_label, j, i, show_seat)
+
+        # Label 3
+        self.label3 = tk.Label(self.window)
+        self.label3.grid(row=0, column=2)
+
+        def make_payment():
+            global selected
+            for select in selected:
+                print(str(select[0].print()))
+            MakePayment()
+
+        def cancel_command():
+            global selected
+            selected = []
+            self.window.destroy()
+
+        self.payment_button = tk.Button(self.label3, text="Make Payment", command=make_payment)
+        self.payment_button.grid(row=0, column=0)
+
+        self.cancel_button = tk.Button(self.label3, text="Cancel", command=cancel_command)
+        self.cancel_button.grid(row=1, column=0)
 
 
 class ShowUi:
@@ -205,44 +345,45 @@ class ShowUi:
             ToShow(self.show)
 
         elif type(current_user) == Guest:
-            self.window = tk.Toplevel()
-            self.window.title("Info")
-            self.window.resizable(False, False)
-
-            self.frame = tk.Frame(self.window)
-            self.frame.grid(row=0, column=0)
-
-            def login_command():
-                UserLogin()
-                self.window.destroy()
-
-            def sign_in_command():
-                UserSignIn()
-                self.window.destroy()
-
-            def cancel_command():
-                self.window.destroy()
-
-            self.info_text = tk.Text(self.window, width=50, height=2)
-            self.info_text.grid(row=0, column=0)
-            self.info_text.insert("1.0", "            You have not login yet. \n"
-                                         "      Please login or register an account.")
-            self.info_text.config(state="disabled")
-
-            self.button_label = tk.Label(self.window)
-            self.button_label.grid(row=1, column=0)
-
-            # Login Button
-            self.login_button = tk.Button(self.button_label, text="Login", command=login_command)
-            self.login_button.grid(row=1, column=1, padx=50, pady=5)
-
-            # Sign In Button
-            self.sign_in_button = tk.Button(self.button_label, text="Sign In", command=sign_in_command)
-            self.sign_in_button.grid(row=1, column=0, padx=50, pady=5)
-
-            # Cancel Button
-            self.cancel_button = tk.Button(self.button_label, text="Cancel", command=cancel_command)
-            self.cancel_button.grid(row=2, column=0, padx=20, pady=5)
+            ToShow(self.show)
+            # self.window = tk.Toplevel()
+            # self.window.title("Info")
+            # self.window.resizable(False, False)
+            #
+            # self.frame = tk.Frame(self.window)
+            # self.frame.grid(row=0, column=0)
+            #
+            # def login_command():
+            #     UserLogin()
+            #     self.window.destroy()
+            #
+            # def sign_in_command():
+            #     UserSignIn()
+            #     self.window.destroy()
+            #
+            # def cancel_command():
+            #     self.window.destroy()
+            #
+            # self.info_text = tk.Text(self.window, width=50, height=2)
+            # self.info_text.grid(row=0, column=0)
+            # self.info_text.insert("1.0", "            You have not login yet. \n"
+            #                              "      Please login or register an account.")
+            # self.info_text.config(state="disabled")
+            #
+            # self.button_label = tk.Label(self.window)
+            # self.button_label.grid(row=1, column=0)
+            #
+            # # Login Button
+            # self.login_button = tk.Button(self.button_label, text="Login", command=login_command)
+            # self.login_button.grid(row=1, column=1, padx=50, pady=5)
+            #
+            # # Sign In Button
+            # self.sign_in_button = tk.Button(self.button_label, text="Sign In", command=sign_in_command)
+            # self.sign_in_button.grid(row=1, column=0, padx=50, pady=5)
+            #
+            # # Cancel Button
+            # self.cancel_button = tk.Button(self.button_label, text="Cancel", command=cancel_command)
+            # self.cancel_button.grid(row=2, column=0, padx=20, pady=5)
 
     def delete(self):
         self.show_text.destroy()

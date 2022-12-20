@@ -22,8 +22,20 @@ class CinemaHallSeat:
         self.__seat_coulomn = seat_coulomn
         self.__seat_type = seat_type
 
+    def get_seat_row(self):
+        return self.__seat_row
+
+    def get_seat_coulomn(self):
+        return self.__seat_coulomn
+
     def get_seat_type(self):
         return self.__seat_type
+
+    def set_seat_type(self, value: SeatType):
+        self.__seat_type = value
+
+    def __str__(self):
+        return f"Row: {self.__seat_row}  Coulomn: {self.__seat_coulomn}  Type: {self.__seat_type}"
 
 
 class CinemaHall:
@@ -31,7 +43,7 @@ class CinemaHall:
                  name: str,
                  total_row: int,
                  total_coulomn: int,
-                 cinema_halls_seats: List[CinemaHallSeat]):
+                 cinema_halls_seats: List):
         self.__name = name
         self.__total_seats = total_row * total_coulomn
         self.__total_row = total_row
@@ -47,7 +59,7 @@ class CinemaHall:
     def get_total_coulomn(self):
         return self.__total_coulomn
 
-    def get_cinema_hall_seats(self):
+    def get_cinema_hall_seats(self) -> List:
         return self.__cinema_halls_seats
 
     def seats_available(self):

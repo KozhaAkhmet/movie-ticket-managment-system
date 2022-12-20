@@ -62,6 +62,7 @@ class Customer(Person):
         self.__email = email
         self.__phone = phone
         self.__account = account
+        self.__bookings = []
 
     # def compare_accounts(self,
     #                      compare_with: Account):
@@ -78,7 +79,7 @@ class Customer(Person):
         None
 
     def get_bookings(self):
-        None
+        return self.__bookings
 
 
 class Admin(Person):

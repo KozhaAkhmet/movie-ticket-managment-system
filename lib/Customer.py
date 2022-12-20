@@ -19,6 +19,10 @@ class ShowSeat(CinemaHallSeat):
         self.__is_reserved = is_reserved
         self.__price = price
 
+    def print(self):
+        return f"Row: {super().get_seat_row()}  Coulomn: {super().get_seat_coulomn()}  " \
+               f"Type: {super().get_seat_type()} Price: {self.__price}"
+
 
 class Payment:
     def __init__(self,
