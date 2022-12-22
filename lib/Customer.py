@@ -77,7 +77,7 @@ class Booking:
     def get_booking_number(self):
         return self.__booking_number
 
-    def get_nuber_of_seats(self):
+    def get_number_of_seats(self):
         return self.__number_of_seats
 
     def get_show(self):
@@ -85,3 +85,6 @@ class Booking:
 
     def get_price(self):
         return self.__payment.get_amount()
+
+    def get_show_seats(self):
+        return self.__seats

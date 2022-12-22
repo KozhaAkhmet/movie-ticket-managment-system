@@ -32,7 +32,7 @@ class BookingUI:
         self.booking_text.insert("1.0",
                                  " Date: " + str(booking.get_date()) +
                                  "\n Booking Number: " + str(booking.get_booking_number()) +
-                                 "\n Number of seats: " + str(booking.get_nuber_of_seats()) +
+                                 "\n Number of seats: " + str(booking.get_number_of_seats()) +
                                  "\n Show:" + str(booking.get_show()['Title']) +
                                  "\n Price: " + str(booking.get_price()))
         self.booking_text.config(state='disabled')
@@ -40,6 +40,9 @@ class BookingUI:
 
         def cancel_booking():
             self.booking_label.destroy()
+            seats = booking.get_show_seats()
+            for seat in seats:
+                seat.set_seat_type(SeatType.ACCESSIBLE)
             current_user.cancel_booking(booking)
             booking_list.remove(booking)
 
