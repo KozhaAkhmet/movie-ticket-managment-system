@@ -1,7 +1,7 @@
 import datetime
 import tkinter as tk
 from tkinter.ttk import *
-
+import tkinter.ttk as ttk
 from tkinter.messagebox import showinfo
 from typing import List
 
@@ -610,13 +610,11 @@ def main():
     window = tk.Tk()
     window.title("Movie Ticket Management System")
     window.resizable(False, False)
-
-    window.geometry("1050x650")
+    window.geometry("1500x700")
     window.config(bg="#FAD8D6")
 
     # Image
-    logo = tk.PhotoImage(file="logomuz-movie-ticket-logo.png")
-
+    logo = tk.PhotoImage(file="WhatsApp_Image_2022-12-26_at_16.51.45-removebg-preview (2).png")
     w1 = tk.Label(window, image=logo)
     w1.grid(row=4, column=0)
 
@@ -635,9 +633,7 @@ def main():
     first_frame.grid(row=1, column=0)
 
     # Time and Date
-
-    time_text = tk.Text(first_frame, height=2, width=80, font=("Helvatica", 10), pady=1, padx=1, spacing1=2, bg="#f0f0f0")
-
+    time_text = tk.Text(first_frame, height=2, width=80, font=("Helvatica", 10), pady=1, padx=1, spacing1=2)
     time_text.insert("1.0",
                      "Current Time: " + str(current_datetime.time())[:-7] + "\nDate: " + str(current_datetime.date()))
     time_text.config(state='disabled')
@@ -665,84 +661,30 @@ def main():
     ################################################
 
     # --------------------Second Row-------------------
-
-    # Main Frame 
-
+    # Main Frame
     second_frame = tk.LabelFrame(frame, text="Search Movie", bd=4, fg="#890B59", bg="#FAD8D6",
                                  font=("Helvetica", 16), labelanchor="n", relief="groove",
                                  pady=20, padx=4, height=200, width=200)
 
     second_frame.grid(row=2, column=0, padx=45, pady=20)
 
-    # Genre filter
-    genre_label = tk.Label(second_frame, text="Genre", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
-    genre_label.grid(row=0, column=3)
-
-
-    second_frame.grid(row=2, column=0, padx=45, pady=20)
-
-
-    ####
-
-    genre_variable = tk.StringVar(genre_entry)
-    genre_variable.set("No filter")  # default value
-
-    w_genre = OptionMenu(genre_entry,
-                         genre_variable,
-                         "No filter",
-                         'Action',
-                         'Comedy',
-                         'Drama',
-                         'Horror',
-                         'Romance',
-                         'Thriller',
-                         'Western',
-                         'Animation',
-                         'Crime',
-                         'Documentary',
-                         'Family',
-                         'Fantasy',
-                         'History',
-                         'Music',
-                         'Mystery',
-                         'Science Fiction',
-                         'TV Movie',
-                         'War',
-                         'Foreign')
-
-    w_genre.pack()
-
-    #####
-    # Release Date filter
-    release_date_label = tk.Label(second_frame, text="Release Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
-    release_date_label.grid(row=0, column=4)
-
+    # Title filter
+    title_label = tk.Label(second_frame, text="Title", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12), width=20)
+    title_label.grid(row=0, column=1)
 
     title_entry = tk.Entry(second_frame, bg="#f0f0f0")
     title_entry.grid(row=1, column=1)
 
     # Language filter
-
-    language_label = tk.Label(second_frame, text="Language", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
-
+    language_label = tk.Label(second_frame, text="Language", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12), width=20)
     language_label.grid(row=0, column=2)
 
     lang_combobox = ttk.Combobox(second_frame, values=['EN', 'FR', 'HI', 'IT', 'JA', 'ZH', 'TR'])
     lang_combobox.grid(row=1, column=2)
 
-
-    ###########################################
-    lang_variable = tk.StringVar(language_entry)
-    lang_variable.set("")  # default value
-
-    w_lang = OptionMenu(language_entry, lang_variable, "", "EN", "FR", "HI", "IT", "JA", "ZH", "TR")
-    w_lang.pack()
-    ###
-
-    # Title filter
-    title_label = tk.Label(second_frame, text="Title", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
-    title_label.grid(row=0, column=1)
-
+    # Genre filter
+    genre_label = tk.Label(second_frame, text="Genre", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12), width=20)
+    genre_label.grid(row=0, column=3)
 
     genre_combobox = ttk.Combobox(second_frame,
                                   values=[
@@ -771,38 +713,45 @@ def main():
     release_date_label = tk.Label(second_frame, text="Release Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12), width=20)
     release_date_label.grid(row=0, column=4)
 
+    release_date_entry = tk.Entry(second_frame, bg="#f0f0f0")
+    release_date_entry.grid(row=1, column=4)
 
     # country filter
-    country_label = tk.Label(second_frame, text="Country", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
+    country_label = tk.Label(second_frame, text="Country", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12), width=20)
     country_label.grid(row=0, column=5)
 
-    country_entry = tk.Entry(second_frame)
-    country_entry.grid(row=1, column=5)
-
-    ########
-
-    country_variable = tk.StringVar(country_entry)
-    country_variable.set("")  # default value
-
-    w_country = OptionMenu(country_entry, country_variable, "", 'USA', 'UK', 'Canada', 'France', 'Germany', 'Italy',
-                           'Spain', 'Japan', 'China', 'India', 'Australia', 'Brazil', 'Mexico', 'Russia', 'South Korea',
-                           'Turkey', 'Iran', 'Saudi Arabia', 'Egypt', 'Nigeria')
-    w_country.pack()
-
-    #######
+    country_combobox = ttk.Combobox(second_frame,
+                                    values=['USA',
+                                            'UK',
+                                            'Canada',
+                                            'France',
+                                            'Germany',
+                                            'Italy',
+                                            'Spain',
+                                            'Japan',
+                                            'China',
+                                            'India',
+                                            'Australia',
+                                            'Brazil',
+                                            'Mexico',
+                                            'Russia',
+                                            'South Korea',
+                                            'Turkey',
+                                            'Iran',
+                                            'Saudi Arabia',
+                                            'Egypt',
+                                            'Nigeria'])
+    country_combobox.grid(row=1, column=5)
 
     # Seat filter
-    seat_label = tk.Label(second_frame, text="Seat", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
-
+    seat_label = tk.Label(second_frame, text="Seat", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12), width=20)
     seat_label.grid(row=0, column=6)
 
     seat_entry = tk.Entry(second_frame, bg="#f0f0f0")
     seat_entry.grid(row=1, column=6)
 
     # Date filter
-
-    date_label = tk.Label(second_frame, text="Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
-
+    date_label = tk.Label(second_frame, text="Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12), width=20)
     date_label.grid(row=0, column=7)
 
     date_entry = tk.Entry(second_frame, bg="#f0f0f0")
@@ -816,12 +765,10 @@ def main():
         print("Search pressed!")
 
         filter_values = {"Title": title_entry.get(),
-
-                         "Language": lang_variable.get(),
-                         "Genre": genre_variable.get(),
+                         "Language": lang_combobox.get(),
+                         "Genre": genre_combobox.get(),
                          "Rel_date": release_date_entry.get(),
-                         "Country": country_variable.get(),
-
+                         "Country": country_combobox.get(),
                          "Seat": seat_entry.get(),
                          "Date": date_entry.get()
                          }
@@ -846,9 +793,7 @@ def main():
         result_main_frame.pack(fill=tk.BOTH, expand=1)
 
         # Create canvas
-
-        result_canvas = tk.Canvas(result_main_frame,width=950, bd=4, bg="#FAD8D6",)
-
+        result_canvas = tk.Canvas(result_main_frame, width=950, bd=4, bg="#FAD8D6", )
 
         result_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
@@ -871,7 +816,6 @@ def main():
             i += 1
         third_frame.grid(row=3, column=0, padx=45, pady=20)
 
-
     # Search Button
     search_button = tk.Button(second_frame, text="Search", command=search_by_filter, fg="white", bg="#890B59")
     search_button.grid(row=1, column=8)
@@ -881,5 +825,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
