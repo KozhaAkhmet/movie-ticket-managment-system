@@ -23,12 +23,13 @@ show_instance = 4
 selected = []
 
 
+
 class BookingUI:
     def __init__(self, booking, frame, row):
-        self.booking_label = tk.Label(frame, text="Booking")
+        self.booking_label = tk.Label(frame, text="Booking" , bg="#FAD8D6")
         self.booking_label.grid(row=row, column=0)
 
-        self.booking_text = tk.Text(self.booking_label, height=5, width=50)
+        self.booking_text = tk.Text(self.booking_label, height=5, width=50, bg="#f0f0f0")
         self.booking_text.insert("1.0",
                                  " Date: " + str(booking.get_date()) +
                                  "\n Booking Number: " + str(booking.get_booking_number()) +
@@ -38,6 +39,7 @@ class BookingUI:
         self.booking_text.config(state='disabled')
         self.booking_text.grid(row=row, column=0)
 
+
         def cancel_booking():
             self.booking_label.destroy()
             seats = booking.get_show_seats()
@@ -46,13 +48,13 @@ class BookingUI:
             current_user.cancel_booking(booking)
             booking_list.remove(booking)
 
-        self.booking_button = tk.Button(self.booking_label, text="Cancel Booking", command=cancel_booking)
+        self.booking_button = tk.Button(self.booking_label, text="Cancel Booking", command=cancel_booking, bg="#890B59"   , fg="#FAD8D6")
         self.booking_button.grid(row=row, column=1)
 
 
 class ViewBookings(tk.Frame):
     def __init__(self, bookings):
-        self.window = tk.Toplevel()
+        self.window = tk.Toplevel(bg="#FAD8D6")
         self.window.title("Bookings")
         self.window.resizable(False, False)
 
@@ -66,7 +68,7 @@ class ViewBookings(tk.Frame):
                 BookingUI(booking, self.window, i)
                 i += 1
 
-            self.back_button = tk.Button(self.window, text="Back", command=self.window.destroy)
+            self.back_button = tk.Button(self.window, text="Back", command=self.window.destroy, bg="#890B59"   , fg="#FAD8D6")
             self.back_button.grid(row=i + 1, column=0)
 
         def disable_event():
@@ -77,7 +79,7 @@ class ViewBookings(tk.Frame):
 
 def update_user(user):
     frame = user_frame_tmp
-    user_name_text = tk.Text(frame, height=2, width=30)
+    user_name_text = tk.Text(frame, height=2, width=30, bg="#f0f0f0")
     user_name_text.insert("1.0", f"Name {user.get_name()}"
                                  f"\nStatus {user.get_account().get_status()} ")
     user_name_text.config(state='disabled')
@@ -86,7 +88,7 @@ def update_user(user):
     def view_bookings():
         ViewBookings(user.get_bookings())
 
-    user_booking_button = tk.Button(frame, text="View Booking", command=view_bookings)
+    user_booking_button = tk.Button(frame, text="View Booking", command=view_bookings, fg="#FAD8D6"   , bg="#890B59")
     user_booking_button.grid(row=1, column=0)
     global current_user
     current_user = user
@@ -101,41 +103,41 @@ class MakeBooking(tk.Frame):
         for select in selected:
             amount += select.get_price()
 
-        self.window = tk.Toplevel()
+        self.window = tk.Toplevel(bg="#FAD8D6")
         self.window.title("Payment Window")
         self.window.resizable(False, False)
 
         # First Frame
-        self.payment_label_frame = tk.LabelFrame(self.window, text="Payment")
+        self.payment_label_frame = tk.LabelFrame(self.window, text="Payment", bg="#FAD8D6")
         self.payment_label_frame.grid(row=0, column=0, padx=15, pady=10)
 
         # Card Name
-        self.payment_name_label = tk.Label(self.payment_label_frame, text="Card Name")
+        self.payment_name_label = tk.Label(self.payment_label_frame, text="Card Name", bg="#FAD8D6")
         self.payment_name_label.grid(row=0, column=0)
 
-        self.payment_name_entry = tk.Entry(self.payment_label_frame)
+        self.payment_name_entry = tk.Entry(self.payment_label_frame, bg="#f0f0f0")
         self.payment_name_entry.grid(row=1, column=0)
 
         # Card Number
-        self.payment_card_number = tk.Label(self.payment_label_frame, text="Card Number")
+        self.payment_card_number = tk.Label(self.payment_label_frame, text="Card Number", bg="#FAD8D6")
         self.payment_card_number.grid(row=2, column=0)
 
-        self.payment_card_number_entry = tk.Entry(self.payment_label_frame)
+        self.payment_card_number_entry = tk.Entry(self.payment_label_frame, bg="#f0f0f0")
         self.payment_card_number_entry.grid(row=3, column=0)
 
         # Card CSV
-        self.payment_card_csv_label = tk.Label(self.payment_label_frame, text="CSV")
+        self.payment_card_csv_label = tk.Label(self.payment_label_frame, text="CSV", bg="#FAD8D6")
         self.payment_card_csv_label.grid(row=4, column=0)
 
-        self.payment_card_csv_entry = tk.Entry(self.payment_label_frame)
+        self.payment_card_csv_entry = tk.Entry(self.payment_label_frame, bg="#f0f0f0")
         self.payment_card_csv_entry.grid(row=5, column=0)
 
         # Second Frame
 
-        self.details_label_frame = tk.LabelFrame(self.window, text="Booking Details")
+        self.details_label_frame = tk.LabelFrame(self.window, text="Booking Details", bg="#FAD8D6")
         self.details_label_frame.grid(row=0, column=1)
 
-        self.show_text = tk.Text(self.details_label_frame, height=4, width=20)
+        self.show_text = tk.Text(self.details_label_frame, height=4, width=20, bg="#F0F0F0")
         self.show_text.insert("1.0", "Show: " + str(show["Title"]) +
                               "\nDate: " + str(show["Date"]) +
                               "\nPlayed at: " + show["Played_at"].get_name() +
@@ -179,10 +181,10 @@ class MakeBooking(tk.Frame):
                         for seat in selected:
                             seat.set_seat_type(SeatType.REGULAR)
 
-        self.confirm_button = tk.Button(self.window, text="Confirm", command=confirm_command)
+        self.confirm_button = tk.Button(self.window, text="Confirm", command=confirm_command, fg="#FAD8D6"   , bg="#890B59")
         self.confirm_button.grid(row=6, column=1, pady=10)
 
-        self.cancel_button = tk.Button(self.window, text="Cancel", command=self.window.destroy)
+        self.cancel_button = tk.Button(self.window, text="Cancel", command=self.window.destroy, fg="#FAD8D6"   , bg="#890B59")
         self.cancel_button.grid(row=6, column=0, pady=10)
 
         def disable_event():
@@ -421,20 +423,20 @@ class SeatButton:
 
 class ToShow(tk.Frame):
     def __init__(self, show):
-        self.window = tk.Toplevel()
+        self.window = tk.Toplevel( bg="#FAD8D6")
         self.window.title("Show Info")
         self.window.resizable(False, False)
         # LabelFrame 1
-        self.label = tk.LabelFrame(self.window, text="Cinema Details")
+        self.label = tk.LabelFrame(self.window, text="Cinema Details", bg="#FAD8D6")
         self.label.grid(row=0, column=0)
 
-        self.cinema_detail_txt = tk.Text(self.label, height=10, width=30)
+        self.cinema_detail_txt = tk.Text(self.label, height=10, width=30, bg="#f0f0f0")
         self.cinema_detail_txt.insert("1.0", " Show:" + show["Title"])
         self.cinema_detail_txt.config(state="disabled")
         self.cinema_detail_txt.grid(row=0, column=0)
 
         # Label 2
-        self.label2 = tk.LabelFrame(self.window, text="Select seats")
+        self.label2 = tk.LabelFrame(self.window, text="Select seats", bg="#FAD8D6")
         self.label2.grid(row=0, column=1)
 
         cinema_hall = show["Played_at"]
@@ -442,7 +444,7 @@ class ToShow(tk.Frame):
         row = cinema_hall.get_total_row()
         coulomn = cinema_hall.get_total_coulomn()
 
-        self.cinema_panel_text = tk.Text(self.label2, height=1, width=20)
+        self.cinema_panel_text = tk.Text(self.label2, height=1, width=20,bg="#FFE15C")
         self.cinema_panel_text.insert("1.0", "   Cinema Monitor")
         self.cinema_panel_text.config(state="disabled")
         self.cinema_panel_text.grid(row=0, column=0)
@@ -477,10 +479,10 @@ class ToShow(tk.Frame):
             selected = []
             self.window.destroy()
 
-        self.payment_button = tk.Button(self.window, text="Make Payment", command=make_payment)
+        self.payment_button = tk.Button(self.window, text="Make Payment", command=make_payment,fg="white",bg="#890B59")
         self.payment_button.grid(row=5, column=1, pady=10)
 
-        self.cancel_button = tk.Button(self.window, text="Cancel", command=cancel_command)
+        self.cancel_button = tk.Button(self.window, text="Cancel", command=cancel_command,fg="white",bg="#890B59")
         self.cancel_button.grid(row=5, column=0, pady=10)
 
         def disable_event():
@@ -503,7 +505,7 @@ class ShowUi:
         self.show_text.config(state='disabled')
         self.show_text.grid(row=row, column=0, pady=10)
         self.show = show
-        self.show_button = tk.Button(self.show_label, text="To Show", command=self.to_show, )
+        self.show_button = tk.Button(self.show_label, text="To Show", command=self.to_show, fg="#FAD8D6"   , bg="#890B59")
         self.show_button.grid(row=row, column=1, pady=10)
 
     def to_show(self):
@@ -607,7 +609,7 @@ def main():
     first_frame.grid(row=1, column=0)
 
     # Time and Date
-    time_text = tk.Text(first_frame, height=2, width=80, font=("Helvatica", 10), pady=1, padx=1, spacing1=2)
+    time_text = tk.Text(first_frame, height=2, width=80, font=("Helvatica", 10), pady=1, padx=1, spacing1=2, bg="#f0f0f0")
     time_text.insert("1.0",
                      "Current Time: " + str(current_datetime.time())[:-7] + "\nDate: " + str(current_datetime.date()))
     time_text.config(state='disabled')
@@ -685,7 +687,7 @@ def main():
     release_date_label = tk.Label(second_frame, text="Release Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     release_date_label.grid(row=0, column=4)
 
-    release_date_entry = tk.Entry(second_frame, bg="#f0f0f0")
+    release_date_entry = tk.Entry(second_frame)
     release_date_entry.grid(row=1, column=4)
 
     # Language filter
@@ -707,7 +709,7 @@ def main():
     title_label = tk.Label(second_frame, text="Title", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     title_label.grid(row=0, column=1)
 
-    title_entry = tk.Entry(second_frame, bg="#f0f0f0")
+    title_entry = tk.Entry(second_frame)
     title_entry.grid(row=1, column=1)
 
     # country filter
@@ -733,14 +735,14 @@ def main():
     seat_label = tk.Label(second_frame, text="Seat", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     seat_label.grid(row=0, column=6)
 
-    seat_entry = tk.Entry(second_frame, bg="#f0f0f0")
+    seat_entry = tk.Entry(second_frame)
     seat_entry.grid(row=1, column=6)
 
     # Date filter
     date_label = tk.Label(second_frame, text="Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     date_label.grid(row=0, column=7)
 
-    date_entry = tk.Entry(second_frame, bg="#f0f0f0")
+    date_entry = tk.Entry(second_frame)
     date_entry.grid(row=1, column=7)
 
     # --------------------------------------------
