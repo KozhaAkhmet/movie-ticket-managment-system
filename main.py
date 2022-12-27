@@ -24,10 +24,9 @@ show_instance = 4
 selected = []
 
 
-
 class BookingUI:
     def __init__(self, booking, frame, row):
-        self.booking_label = tk.Label(frame, text="Booking" , bg="#FAD8D6")
+        self.booking_label = tk.Label(frame, text="Booking", bg="#FAD8D6")
         self.booking_label.grid(row=row, column=0)
 
         self.booking_text = tk.Text(self.booking_label, height=5, width=50, bg="#f0f0f0")
@@ -41,7 +40,6 @@ class BookingUI:
         self.booking_text.config(state='disabled')
         self.booking_text.grid(row=row, column=0)
 
-
         def cancel_booking():
             self.booking_label.destroy()
             seats = booking.get_show_seats()
@@ -50,8 +48,8 @@ class BookingUI:
             current_user.cancel_booking(booking)
             booking_list.remove(booking)
 
-
-        self.booking_button = tk.Button(self.booking_label, text="Cancel Booking", command=cancel_booking, bg="#890B59"   , fg="#FAD8D6")
+        self.booking_button = tk.Button(self.booking_label, text="Cancel Booking", command=cancel_booking, bg="#890B59",
+                                        fg="#FAD8D6")
 
         self.booking_button.grid(row=row, column=1)
 
@@ -74,15 +72,10 @@ class ViewBookings(tk.Frame):
                 BookingUI(booking, self.window, i)
                 i += 1
 
-
-            self.back_button = tk.Button(self.window, text="Back", command=self.window.destroy, bg="#890B59"   , fg="#FAD8D6")
+            self.back_button = tk.Button(self.window, text="Back", command=self.window.destroy, bg="#890B59",
+                                         fg="#FAD8D6")
 
             self.back_button.grid(row=i + 1, column=0)
-
-        def disable_event():
-            pass
-
-        self.window.protocol("WM_DELETE_WINDOW", disable_event)
 
 
 def update_user(user):
@@ -98,8 +91,7 @@ def update_user(user):
     def view_bookings():
         ViewBookings(user.get_bookings())
 
-
-    user_booking_button = tk.Button(frame, text="View Booking", command=view_bookings, fg="#FAD8D6"   , bg="#890B59")
+    user_booking_button = tk.Button(frame, text="View Booking", command=view_bookings, fg="#FAD8D6", bg="#890B59")
 
     user_booking_button.grid(row=1, column=0)
     global current_user
@@ -114,7 +106,6 @@ class MakeBooking(tk.Frame):
         amount = 0
         for select in selected:
             amount += select.get_price()
-
 
         self.window = tk.Toplevel(bg="#FAD8D6")
 
@@ -149,7 +140,6 @@ class MakeBooking(tk.Frame):
         self.payment_card_csv_entry.grid(row=5, column=0)
 
         # Second Frame
-
 
         self.details_label_frame = tk.LabelFrame(self.window, text="Booking Details", bg="#FAD8D6")
         self.details_label_frame.grid(row=0, column=1)
@@ -199,18 +189,14 @@ class MakeBooking(tk.Frame):
                         for seat in selected:
                             seat.set_seat_type(SeatType.REGULAR)
 
-
-        self.confirm_button = tk.Button(self.window, text="Confirm", command=confirm_command, fg="#FAD8D6"   , bg="#890B59")
+        self.confirm_button = tk.Button(self.window, text="Confirm", command=confirm_command, fg="#FAD8D6",
+                                        bg="#890B59")
         self.confirm_button.grid(row=6, column=1, pady=10)
 
-        self.cancel_button = tk.Button(self.window, text="Cancel", command=self.window.destroy, fg="#FAD8D6"   , bg="#890B59")
+        self.cancel_button = tk.Button(self.window, text="Cancel", command=self.window.destroy, fg="#FAD8D6",
+                                       bg="#890B59")
 
         self.cancel_button.grid(row=6, column=0, pady=10)
-
-        def disable_event():
-            pass
-
-        self.window.protocol("WM_DELETE_WINDOW", disable_event)
 
 
 class UserSignIn(tk.Frame):
@@ -344,11 +330,6 @@ class UserSignIn(tk.Frame):
         self.cancel_button.grid(row=0, column=0, padx=20, pady=5)
 
         # ----------------
-        def disable_event():
-            pass
-
-        self.window.protocol("WM_DELETE_WINDOW", disable_event)
-
 
 
 class UserLogin(tk.Frame):
@@ -411,11 +392,6 @@ class UserLogin(tk.Frame):
 
         # ----------------
 
-        def disable_event():
-            pass
-
-        self.window.protocol("WM_DELETE_WINDOW", disable_event)
-
 
 class SeatButton:
     def __init__(self, frame, row, coulomn, show_seat: ShowSeat):
@@ -444,7 +420,7 @@ class SeatButton:
 
 class ToShow(tk.Frame):
     def __init__(self, show):
-        self.window = tk.Toplevel( bg="#FAD8D6")
+        self.window = tk.Toplevel(bg="#FAD8D6")
         self.window.title("Show Info")
         self.window.resizable(False, False)
         # LabelFrame 1
@@ -465,7 +441,7 @@ class ToShow(tk.Frame):
         row = cinema_hall.get_total_row()
         coulomn = cinema_hall.get_total_coulomn()
 
-        self.cinema_panel_text = tk.Text(self.label2, height=1, width=20,bg="#FFE15C")
+        self.cinema_panel_text = tk.Text(self.label2, height=1, width=20, bg="#FFE15C")
         self.cinema_panel_text.insert("1.0", "   Cinema Monitor")
         self.cinema_panel_text.config(state="disabled")
         self.cinema_panel_text.grid(row=0, column=0)
@@ -500,16 +476,14 @@ class ToShow(tk.Frame):
             selected = []
             self.window.destroy()
 
-        self.payment_button = tk.Button(self.window, text="Make Payment", command=make_payment,fg="white",bg="#890B59")
+        self.payment_button = tk.Button(self.window, text="Make Payment", command=make_payment, fg="white",
+                                        bg="#890B59")
         self.payment_button.grid(row=5, column=1, pady=10)
 
-        self.cancel_button = tk.Button(self.window, text="Cancel", command=cancel_command,fg="white",bg="#890B59")
+        self.cancel_button = tk.Button(self.window, text="Cancel", command=cancel_command, fg="white", bg="#890B59")
         self.cancel_button.grid(row=5, column=0, pady=10)
 
-        def disable_event():
-            pass
-
-        self.window.protocol("WM_DELETE_WINDOW", disable_event)
+        self.window.protocol("WM_DELETE_WINDOW", cancel_command)
 
 
 class ShowUi:
@@ -518,7 +492,7 @@ class ShowUi:
         self.show_label = tk.Label(frame, text="show", background="#FAD8D6")
         self.show_label.grid(row=row, column=0)
 
-        self.show_text = tk.Text(self.show_label, height=4,)
+        self.show_text = tk.Text(self.show_label, height=4, width=115)
         self.show_text.insert("1.0", str(show["Title"]) +
                               "\n genre: " + str(show["Genre"]) +
                               "\n seats: " + str(show['Seat']) +
@@ -526,7 +500,7 @@ class ShowUi:
         self.show_text.config(state='disabled')
         self.show_text.grid(row=row, column=0, pady=10)
         self.show = show
-        self.show_button = tk.Button(self.show_label, text="To Show", command=self.to_show, fg="#FAD8D6"   , bg="#890B59")
+        self.show_button = tk.Button(self.show_label, text="To Show", command=self.to_show, fg="#FAD8D6", bg="#890B59")
         self.show_button.grid(row=row, column=1, pady=10)
 
     def to_show(self):
@@ -538,7 +512,7 @@ class ShowUi:
             self.window.title("Info")
             self.window.resizable(False, False)
 
-            self.frame = tk.Frame(self.window,bg='#FAD8D6')
+            self.frame = tk.Frame(self.window, bg='#FAD8D6')
             self.frame.grid(row=0, column=0)
 
             def login_command():
@@ -558,7 +532,7 @@ class ShowUi:
                                          "      Please login or register an account.")
             self.info_text.config(state="disabled")
 
-            self.button_label = tk.Label(self.window,bg='#FAD8D6')
+            self.button_label = tk.Label(self.window, bg='#FAD8D6')
             self.button_label.grid(row=1, column=0)
 
             # Login Button
@@ -576,7 +550,6 @@ class ShowUi:
                                            fg="white", bg="#890B59")
             self.cancel_button.grid(row=2, column=0, padx=20, pady=5)
 
-
     def delete(self):
         self.show_text.destroy()
         self.show_label.destroy()
@@ -586,12 +559,10 @@ class ShowUi:
 
 class ResultFrameUI:
     def __init__(self, show, frame, row):
-
-
         self.show_label = tk.Label(frame, text="show", background="#FAD8D6")
         self.show_label.grid(row=row, column=0)
 
-        self.show_text = tk.Text(self.show_label, height=4,)
+        self.show_text = tk.Text(self.show_label, height=4, )
 
         self.show_text.insert("1.0", str(show["Title"]) +
                               "\n genre: " + str(show["Genre"]) +
@@ -676,7 +647,8 @@ def main():
     title_entry.grid(row=1, column=1)
 
     # Language filter
-    language_label = tk.Label(second_frame, text="Language", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12), width=20)
+    language_label = tk.Label(second_frame, text="Language", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12),
+                              width=20)
     language_label.grid(row=0, column=2)
 
     lang_combobox = ttk.Combobox(second_frame, values=['EN', 'FR', 'HI', 'IT', 'JA', 'ZH', 'TR'])
@@ -710,7 +682,8 @@ def main():
     genre_combobox.grid(row=1, column=3)
 
     # Release Date filter
-    release_date_label = tk.Label(second_frame, text="Release Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12), width=20)
+    release_date_label = tk.Label(second_frame, text="Release Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12),
+                                  width=20)
     release_date_label.grid(row=0, column=4)
 
     release_date_entry = tk.Entry(second_frame, bg="#f0f0f0")
@@ -793,7 +766,7 @@ def main():
         result_main_frame.pack(fill=tk.BOTH, expand=1)
 
         # Create canvas
-        result_canvas = tk.Canvas(result_main_frame, width=950, bd=4, bg="#FAD8D6", )
+        result_canvas = tk.Canvas(result_main_frame, width=1010, bd=4, bg="#FAD8D6", )
 
         result_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
@@ -825,4 +798,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
