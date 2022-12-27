@@ -158,10 +158,11 @@ class MakeBooking(tk.Frame):
             values = [self.payment_name_entry.get(),
                       self.payment_card_csv_entry.get(),
                       self.payment_card_number_entry.get()]
-            for value in values:
-                if value == "":
-                    showinfo(message="You need to fill all entries")
-                    return
+
+            if any(value == "" for value in values):
+                showinfo(message="You need to fill all entries")
+                return
+                
 
             # Making payment at background..................
 
@@ -449,12 +450,13 @@ class ToShow(tk.Frame):
         self.seat_button_label = tk.Label(self.label2)
         self.seat_button_label.grid(row=1, column=0, padx=10, pady=20)
 
-        for i in range(0, coulomn):
+        """for i in range(0, coulomn):
             for j in range(0, row):
                 for show_seat in cinema_hall_seats:
                     if show_seat.get_seat_row() == j and \
                             show_seat.get_seat_coulomn() == i:
-                        SeatButton(self.seat_button_label, j, i, show_seat)
+                        SeatButton(self.seat_button_label, j, i, show_seat)"""
+        [SeatButton(self.seat_button_label, j, i, show_seat) for show_seat in cinema_hall_seats for i in range(0, coulomn) for j in range(0, row) if show_seat.get_seat_row() == j and show_seat.get_seat_coulomn() == i]
 
         # Label 3
         self.label3 = tk.Label(self.window)
@@ -581,7 +583,7 @@ def main():
     window = tk.Tk()
     window.title("Movie Ticket Management System")
     window.resizable(False, False)
-    window.geometry("1500x700")
+    window.geometry("1450x700")
     window.config(bg="#FAD8D6")
 
     # Image
