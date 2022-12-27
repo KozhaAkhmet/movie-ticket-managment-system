@@ -1,6 +1,7 @@
 import datetime
 import tkinter as tk
 from tkinter.ttk import *
+
 from tkinter.messagebox import showinfo
 from typing import List
 
@@ -30,6 +31,7 @@ class BookingUI:
         self.booking_label.grid(row=row, column=0)
 
         self.booking_text = tk.Text(self.booking_label, height=5, width=50, bg="#f0f0f0")
+
         self.booking_text.insert("1.0",
                                  " Date: " + str(booking.get_date()) +
                                  "\n Booking Number: " + str(booking.get_booking_number()) +
@@ -48,13 +50,17 @@ class BookingUI:
             current_user.cancel_booking(booking)
             booking_list.remove(booking)
 
+
         self.booking_button = tk.Button(self.booking_label, text="Cancel Booking", command=cancel_booking, bg="#890B59"   , fg="#FAD8D6")
+
         self.booking_button.grid(row=row, column=1)
 
 
 class ViewBookings(tk.Frame):
     def __init__(self, bookings):
+
         self.window = tk.Toplevel(bg="#FAD8D6")
+
         self.window.title("Bookings")
         self.window.resizable(False, False)
 
@@ -68,7 +74,9 @@ class ViewBookings(tk.Frame):
                 BookingUI(booking, self.window, i)
                 i += 1
 
+
             self.back_button = tk.Button(self.window, text="Back", command=self.window.destroy, bg="#890B59"   , fg="#FAD8D6")
+
             self.back_button.grid(row=i + 1, column=0)
 
         def disable_event():
@@ -79,7 +87,9 @@ class ViewBookings(tk.Frame):
 
 def update_user(user):
     frame = user_frame_tmp
+
     user_name_text = tk.Text(frame, height=2, width=30, bg="#f0f0f0")
+
     user_name_text.insert("1.0", f"Name {user.get_name()}"
                                  f"\nStatus {user.get_account().get_status()} ")
     user_name_text.config(state='disabled')
@@ -88,7 +98,9 @@ def update_user(user):
     def view_bookings():
         ViewBookings(user.get_bookings())
 
+
     user_booking_button = tk.Button(frame, text="View Booking", command=view_bookings, fg="#FAD8D6"   , bg="#890B59")
+
     user_booking_button.grid(row=1, column=0)
     global current_user
     current_user = user
@@ -103,11 +115,14 @@ class MakeBooking(tk.Frame):
         for select in selected:
             amount += select.get_price()
 
+
         self.window = tk.Toplevel(bg="#FAD8D6")
+
         self.window.title("Payment Window")
         self.window.resizable(False, False)
 
         # First Frame
+
         self.payment_label_frame = tk.LabelFrame(self.window, text="Payment", bg="#FAD8D6")
         self.payment_label_frame.grid(row=0, column=0, padx=15, pady=10)
 
@@ -130,14 +145,17 @@ class MakeBooking(tk.Frame):
         self.payment_card_csv_label.grid(row=4, column=0)
 
         self.payment_card_csv_entry = tk.Entry(self.payment_label_frame, bg="#f0f0f0")
+
         self.payment_card_csv_entry.grid(row=5, column=0)
 
         # Second Frame
+
 
         self.details_label_frame = tk.LabelFrame(self.window, text="Booking Details", bg="#FAD8D6")
         self.details_label_frame.grid(row=0, column=1)
 
         self.show_text = tk.Text(self.details_label_frame, height=4, width=20, bg="#F0F0F0")
+
         self.show_text.insert("1.0", "Show: " + str(show["Title"]) +
                               "\nDate: " + str(show["Date"]) +
                               "\nPlayed at: " + show["Played_at"].get_name() +
@@ -181,10 +199,12 @@ class MakeBooking(tk.Frame):
                         for seat in selected:
                             seat.set_seat_type(SeatType.REGULAR)
 
+
         self.confirm_button = tk.Button(self.window, text="Confirm", command=confirm_command, fg="#FAD8D6"   , bg="#890B59")
         self.confirm_button.grid(row=6, column=1, pady=10)
 
         self.cancel_button = tk.Button(self.window, text="Cancel", command=self.window.destroy, fg="#FAD8D6"   , bg="#890B59")
+
         self.cancel_button.grid(row=6, column=0, pady=10)
 
         def disable_event():
@@ -328,6 +348,7 @@ class UserSignIn(tk.Frame):
             pass
 
         self.window.protocol("WM_DELETE_WINDOW", disable_event)
+
 
 
 class UserLogin(tk.Frame):
@@ -555,6 +576,7 @@ class ShowUi:
                                            fg="white", bg="#890B59")
             self.cancel_button.grid(row=2, column=0, padx=20, pady=5)
 
+
     def delete(self):
         self.show_text.destroy()
         self.show_label.destroy()
@@ -565,10 +587,12 @@ class ShowUi:
 class ResultFrameUI:
     def __init__(self, show, frame, row):
 
+
         self.show_label = tk.Label(frame, text="show", background="#FAD8D6")
         self.show_label.grid(row=row, column=0)
 
         self.show_text = tk.Text(self.show_label, height=4,)
+
         self.show_text.insert("1.0", str(show["Title"]) +
                               "\n genre: " + str(show["Genre"]) +
                               "\n seats: " + str(show['Seat']) +
@@ -586,11 +610,13 @@ def main():
     window = tk.Tk()
     window.title("Movie Ticket Management System")
     window.resizable(False, False)
+
     window.geometry("1050x650")
     window.config(bg="#FAD8D6")
 
     # Image
     logo = tk.PhotoImage(file="logomuz-movie-ticket-logo.png")
+
     w1 = tk.Label(window, image=logo)
     w1.grid(row=4, column=0)
 
@@ -609,7 +635,9 @@ def main():
     first_frame.grid(row=1, column=0)
 
     # Time and Date
+
     time_text = tk.Text(first_frame, height=2, width=80, font=("Helvatica", 10), pady=1, padx=1, spacing1=2, bg="#f0f0f0")
+
     time_text.insert("1.0",
                      "Current Time: " + str(current_datetime.time())[:-7] + "\nDate: " + str(current_datetime.date()))
     time_text.config(state='disabled')
@@ -637,6 +665,7 @@ def main():
     ################################################
 
     # --------------------Second Row-------------------
+
     # Main Frame 
 
     second_frame = tk.LabelFrame(frame, text="Search Movie", bd=4, fg="#890B59", bg="#FAD8D6",
@@ -649,8 +678,9 @@ def main():
     genre_label = tk.Label(second_frame, text="Genre", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     genre_label.grid(row=0, column=3)
 
-    genre_entry = tk.Entry(second_frame)
-    genre_entry.grid(row=1, column=3)
+
+    second_frame.grid(row=2, column=0, padx=45, pady=20)
+
 
     ####
 
@@ -687,15 +717,19 @@ def main():
     release_date_label = tk.Label(second_frame, text="Release Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     release_date_label.grid(row=0, column=4)
 
-    release_date_entry = tk.Entry(second_frame)
-    release_date_entry.grid(row=1, column=4)
+
+    title_entry = tk.Entry(second_frame, bg="#f0f0f0")
+    title_entry.grid(row=1, column=1)
 
     # Language filter
+
     language_label = tk.Label(second_frame, text="Language", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
+
     language_label.grid(row=0, column=2)
 
-    language_entry = tk.Entry(second_frame)
-    language_entry.grid(row=1, column=2)
+    lang_combobox = ttk.Combobox(second_frame, values=['EN', 'FR', 'HI', 'IT', 'JA', 'ZH', 'TR'])
+    lang_combobox.grid(row=1, column=2)
+
 
     ###########################################
     lang_variable = tk.StringVar(language_entry)
@@ -709,8 +743,34 @@ def main():
     title_label = tk.Label(second_frame, text="Title", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     title_label.grid(row=0, column=1)
 
-    title_entry = tk.Entry(second_frame)
-    title_entry.grid(row=1, column=1)
+
+    genre_combobox = ttk.Combobox(second_frame,
+                                  values=[
+                                      'Action',
+                                      'Comedy',
+                                      'Drama',
+                                      'Horror',
+                                      'Romance',
+                                      'Thriller',
+                                      'Western',
+                                      'Animation',
+                                      'Crime',
+                                      'Documentary',
+                                      'Family',
+                                      'Fantasy',
+                                      'History',
+                                      'Music',
+                                      'Mystery',
+                                      'Science Fiction',
+                                      'TV Movie',
+                                      'War',
+                                      'Foreign'])
+    genre_combobox.grid(row=1, column=3)
+
+    # Release Date filter
+    release_date_label = tk.Label(second_frame, text="Release Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12), width=20)
+    release_date_label.grid(row=0, column=4)
+
 
     # country filter
     country_label = tk.Label(second_frame, text="Country", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
@@ -733,16 +793,19 @@ def main():
 
     # Seat filter
     seat_label = tk.Label(second_frame, text="Seat", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
+
     seat_label.grid(row=0, column=6)
 
-    seat_entry = tk.Entry(second_frame)
+    seat_entry = tk.Entry(second_frame, bg="#f0f0f0")
     seat_entry.grid(row=1, column=6)
 
     # Date filter
+
     date_label = tk.Label(second_frame, text="Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
+
     date_label.grid(row=0, column=7)
 
-    date_entry = tk.Entry(second_frame)
+    date_entry = tk.Entry(second_frame, bg="#f0f0f0")
     date_entry.grid(row=1, column=7)
 
     # --------------------------------------------
@@ -753,10 +816,12 @@ def main():
         print("Search pressed!")
 
         filter_values = {"Title": title_entry.get(),
+
                          "Language": lang_variable.get(),
                          "Genre": genre_variable.get(),
                          "Rel_date": release_date_entry.get(),
                          "Country": country_variable.get(),
+
                          "Seat": seat_entry.get(),
                          "Date": date_entry.get()
                          }
@@ -781,7 +846,9 @@ def main():
         result_main_frame.pack(fill=tk.BOTH, expand=1)
 
         # Create canvas
+
         result_canvas = tk.Canvas(result_main_frame,width=950, bd=4, bg="#FAD8D6",)
+
 
         result_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
@@ -815,33 +882,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-# admin UI? maybe
-"""def cancel_booking():
-        # Get the selected booking number
-        
-        window = tk.Tk()
-        window.title("Cancel Booking")
-        selected_booking = bookings_listbox.get(bookings_listbox.curselection())
-        # Find the booking object in the list of bookings
-        booking_to_cancel = None
-        for booking in booking_list:
-            if booking.get_booking_number() == selected_booking:
-                booking_to_cancel = booking
-                break
-        # If a booking was found, cancel it
-        if booking_to_cancel:
-            booking_to_cancel.set_status(BookingStatus.CANCELED)
-            # Remove the booking from the listbox
-            bookings_listbox.delete(bookings_listbox.curselection())
 
-    # Create a listbox to display the bookings
-        bookings_listbox = tk.Listbox(window)
-        bookings_listbox.pack()
-
-    # Add the bookings to the listbox
-        for booking in booking_list:
-            bookings_listbox.insert(tk.END, booking.get_booking_number())
-
-    # Create a button to cancel the selected booking
-        cancel_button = tk.Button(window, text="Cancel Booking", command=cancel_booking)
-        cancel_button.grid(row=3,column=0)"""
