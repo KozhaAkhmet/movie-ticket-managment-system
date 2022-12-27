@@ -429,7 +429,7 @@ class ToShow(tk.Frame):
         self.label = tk.LabelFrame(self.window, text="Cinema Details")
         self.label.grid(row=0, column=0)
 
-        self.cinema_detail_txt = tk.Text(self.label, height=10, width=30)
+        self.cinema_detail_txt = tk.Text(self.label, height=10, width=90)
         self.cinema_detail_txt.insert("1.0", " Show:" + show["Title"])
         self.cinema_detail_txt.config(state="disabled")
         self.cinema_detail_txt.grid(row=0, column=0)
@@ -496,7 +496,7 @@ class ShowUi:
         self.show_label = tk.Label(frame, text="show", background="#FAD8D6")
         self.show_label.grid(row=row, column=0)
 
-        self.show_text = tk.Text(self.show_label, height=4, )
+        self.show_text = tk.Text(self.show_label, height=4, width=108)
         self.show_text.insert("1.0", str(show["Title"]) +
                               "\n genre: " + str(show["Genre"]) +
                               "\n seats: " + str(show['Seat']) +
@@ -504,7 +504,7 @@ class ShowUi:
         self.show_text.config(state='disabled')
         self.show_text.grid(row=row, column=0, pady=10)
         self.show = show
-        self.show_button = tk.Button(self.show_label, text="To Show", command=self.to_show, )
+        self.show_button = tk.Button(self.show_label, text="To Show", command=self.to_show, fg="white", bg="#890B59")
         self.show_button.grid(row=row, column=1, pady=10)
 
     def to_show(self):
@@ -653,7 +653,7 @@ def main():
     language_label = tk.Label(second_frame, text="Language", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12), width=20)
     language_label.grid(row=0, column=2)
 
-    lang_combobox = ttk.Combobox(second_frame, values=["EN", "FR", "HI", "IT", "JA", "ZH", "TR"])
+    lang_combobox = ttk.Combobox(second_frame, values=['EN', 'FR', 'HI', 'IT', 'JA', 'ZH', 'TR'])
     lang_combobox.grid(row=1, column=2)
 
     # Genre filter
@@ -742,7 +742,7 @@ def main():
                          "Language": lang_combobox.get(),
                          "Genre": genre_combobox.get(),
                          "Rel_date": release_date_entry.get(),
-                         "Country": lang_combobox.get(),
+                         "Country": country_combobox.get(),
                          "Seat": seat_entry.get(),
                          "Date": date_entry.get()
                          }
