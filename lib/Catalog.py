@@ -142,7 +142,7 @@ def search_show_by_filter(show_list: List[Show], filter_values: dict):
         for filter_key in filter_values.keys():
             # print(filter_values[filter_key])
             if filter_values[filter_key] != "":
-                if filter_key == "Seat":
+                if filter_key == "Seat" and filter_key != "-":
                     __result_filter = (show_list[filter_key] >= int(filter_values[filter_key]))
                 elif filter_key == "Date":
                     __result_filter = (show_list[filter_key] == int(filter_values[filter_key]))

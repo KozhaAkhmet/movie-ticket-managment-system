@@ -16,7 +16,7 @@ from Data.FakeData import show_list, booking_list
 from Data.FakeAccounts import user_list
 
 current_user = Guest()
-current_datetime = datetime.datetime(2022, 12, 22, 10, 30)
+current_datetime = datetime.datetime.now()
 result_instance = []
 user_frame_tmp = tk.Frame
 show_instance = 4
@@ -55,7 +55,6 @@ class ViewBookings(tk.Frame):
         self.window = tk.Toplevel()
         self.window.title("Bookings")
         self.window.resizable(False, False)
-
 
         i = 0
         if len(bookings) == 0:
@@ -193,67 +192,75 @@ class MakeBooking(tk.Frame):
 
 
 class UserSignIn(tk.Frame):
+
     def __init__(self):
         self.window = tk.Toplevel()
         self.window.title("User Sign In")
         self.window.resizable(False, False)
 
-        self.frame = tk.Frame(self.window)
+        self.frame = tk.Frame(self.window, bg="#FAD8D6")
         self.frame.grid(row=0, column=0)
 
         # First LabelFrame
 
-        self.user_detail_label_frame = tk.LabelFrame(self.frame, text="User Detail")
+        self.user_detail_label_frame = tk.LabelFrame(self.frame, text="User Detail", fg="#7c044c", bg='#FAD8D6')
         self.user_detail_label_frame.grid(row=0, column=1, padx=15, pady=10)
 
-        self.user_name_label = tk.Label(self.user_detail_label_frame, text="Name")
+        self.user_name_label = tk.Label(self.user_detail_label_frame, text="Name", fg='#890B59', bg='#FAD8D6',
+                                        font=('Arial', 12, 'bold'))
         self.user_name_label.grid(row=0, column=0)
 
-        self.user_name_entry = tk.Entry(self.user_detail_label_frame)
+        self.user_name_entry = tk.Entry(self.user_detail_label_frame, bg='white')
         self.user_name_entry.grid(row=1, column=0)
 
-        self.user_email_label = tk.Label(self.user_detail_label_frame, text="Email")
+        self.user_email_label = tk.Label(self.user_detail_label_frame, text="Email", fg='#890B59', bg='#FAD8D6',
+                                         font=('Arial', 12, 'bold'))
         self.user_email_label.grid(row=2, column=0)
 
-        self.user_email_entry = tk.Entry(self.user_detail_label_frame)
+        self.user_email_entry = tk.Entry(self.user_detail_label_frame, bg='white')
         self.user_email_entry.grid(row=3, column=0)
 
-        self.user_phone_label = tk.Label(self.user_detail_label_frame, text="Phone Number")
+        self.user_phone_label = tk.Label(self.user_detail_label_frame, text="Phone Number", fg='#890B59', bg='#FAD8D6',
+                                         font=('Arial', 12, 'bold'))
         self.user_phone_label.grid(row=4, column=0)
 
-        self.user_phone_entry = tk.Entry(self.user_detail_label_frame)
+        self.user_phone_entry = tk.Entry(self.user_detail_label_frame, bg='white')
         self.user_phone_entry.grid(row=5, column=0)
 
-        self.user_address_label = tk.Label(self.user_detail_label_frame, text="Address")
+        self.user_address_label = tk.Label(self.user_detail_label_frame, text="Address", fg='#890B59', bg='#FAD8D6',
+                                           font=('Arial', 12, 'bold'))
         self.user_address_label.grid(row=6, column=0)
 
-        self.address_entry = tk.Entry(self.user_detail_label_frame)
+        self.address_entry = tk.Entry(self.user_detail_label_frame, bg='white')
         self.address_entry.grid(row=7, column=0)
 
         # Second LabelFrame
 
-        self.main_frame = tk.LabelFrame(self.frame, text="User Sign In")
+        self.main_frame = tk.LabelFrame(self.frame, text="User Sign In", fg="#7c044c", bg='#FAD8D6')
         self.main_frame.grid(row=0, column=2, padx=15, pady=10)
 
         # Name
-        self.nickname_label = tk.Label(self.main_frame, text="Nickname")
+        self.nickname_label = tk.Label(self.main_frame, text="Nickname", fg='#890B59', bg='#FAD8D6',
+                                       font=('Arial', 12, 'bold'))
         self.nickname_label.grid(row=0, column=0)
 
-        self.nickname_entry = tk.Entry(self.main_frame, width=17)
+        self.nickname_entry = tk.Entry(self.main_frame, width=17, bg='white')
         self.nickname_entry.grid(row=1, column=0, padx=13)
 
         # Password
-        self.pwd_label = tk.Label(self.main_frame, text="Password")
+        self.pwd_label = tk.Label(self.main_frame, text="Password", fg='#890B59', bg='#FAD8D6',
+                                  font=('Arial', 12, 'bold'))
         self.pwd_label.grid(row=2, column=0)
 
-        self.pwd_entry = tk.Entry(self.main_frame, width=17)
+        self.pwd_entry = tk.Entry(self.main_frame, show="*", width=17, bg='white')
         self.pwd_entry.grid(row=3, column=0, padx=13)
 
         # Password Retry
-        self.pwd_retry_label = tk.Label(self.main_frame, text="Password Retry")
+        self.pwd_retry_label = tk.Label(self.main_frame, text="Password Retry", fg='#890B59', bg='#FAD8D6',
+                                        font=('Arial', 12, 'bold'))
         self.pwd_retry_label.grid(row=4, column=0, padx=13)
 
-        self.pwd_retry_entry = tk.Entry(self.main_frame, width=17)
+        self.pwd_retry_entry = tk.Entry(self.main_frame, show="*", width=17, bg='white')
         self.pwd_retry_entry.grid(row=5, column=0, padx=13)
 
         # ---------Buttons
@@ -275,41 +282,43 @@ class UserSignIn(tk.Frame):
             else:
                 control = True
 
-            try:
-                if control is True:
-                    tmp_account = Account(self.nickname_entry.get(),
-                                          self.pwd_entry.get(),
-                                          AccountStatus.ACTIVE)
-                    address_str = self.address_entry.get().split(",")
-                    tmp_address = Address(address_str[0],
-                                          address_str[1],
-                                          address_str[2],
-                                          address_str[3],
-                                          address_str[4]
-                                          )
-                    tmp_customer = Customer(control_str(self.user_name_entry.get()),
-                                            tmp_address,
-                                            control_str(self.user_email_entry.get()),
-                                            control_str(self.user_phone_entry.get()),
-                                            tmp_account)
+            # try:
+            if control is True:
+                tmp_account = Account(self.nickname_entry.get(),
+                                      self.pwd_entry.get(),
+                                      AccountStatus.ACTIVE)
+                address_str = self.address_entry.get().split(",")
+                tmp_address = Address(address_str[0],
+                                      address_str[1],
+                                      address_str[2],
+                                      address_str[3],
+                                      address_str[4]
+                                      )
+                tmp_customer = Customer(self.user_name_entry.get(),
+                                        tmp_address,
+                                        self.user_email_entry.get(),
+                                        self.user_phone_entry.get(),
+                                        tmp_account)
 
-                    user_list.append(tmp_customer)
+                user_list.append(tmp_customer)
 
-                    if tmp_customer in user_list:
-                        print(tmp_customer)
-                        self.window.destroy()
-            except:
-                showinfo("Error", " Error Occurred")
+                if tmp_customer in user_list:
+                    print(tmp_customer)
+                    self.window.destroy()
+            # except:
+            #    showinfo("Error", " Error Occurred")
 
-        self.button_label = tk.Label(self.main_frame)
+        self.button_label = tk.Label(self.main_frame, bg="#FAD8D6")
         self.button_label.grid(row=6, column=0)
 
         # Login Button
-        self.sign_in_button = tk.Button(self.button_label, text="Sign In", command=sign_in_command)
+        self.sign_in_button = tk.Button(self.button_label, text="Sign In", command=sign_in_command, fg="white",
+                                        bg="#890B59")
         self.sign_in_button.grid(row=0, column=1, padx=20, pady=5)
 
         # Cancel Button
-        self.cancel_button = tk.Button(self.button_label, text="Cancel", command=self.window.destroy)
+        self.cancel_button = tk.Button(self.button_label, text="Cancel", command=self.window.destroy, fg="white",
+                                       bg="#890B59")
         self.cancel_button.grid(row=0, column=0, padx=20, pady=5)
 
         # ----------------
@@ -325,25 +334,25 @@ class UserLogin(tk.Frame):
         self.window.title("User Login")
         self.window.resizable(False, False)
 
-        self.frame = tk.Frame(self.window)
+        self.frame = tk.Frame(self.window, bg="#FAD8D6")
         self.frame.pack()
 
         # Main Frame
-        self.main_frame = tk.LabelFrame(self.frame, text="User Login")
+        self.main_frame = tk.LabelFrame(self.frame, text="User Login", fg="#7c044c", bg='#FAD8D6')
         self.main_frame.grid(row=0, column=0, padx=15, pady=10)
 
         # Name
-        self.name_label = tk.Label(self.main_frame, text="Name")
+        self.name_label = tk.Label(self.main_frame, text="Name", fg='#890B59', bg='#FAD8D6')
         self.name_label.grid(row=0, column=0)
 
         self.name_entry = tk.Entry(self.main_frame)
         self.name_entry.grid(row=1, column=0, padx=13)
 
         # Password
-        self.pwd_label = tk.Label(self.main_frame, text="Password")
+        self.pwd_label = tk.Label(self.main_frame, text="Password", fg='#890B59', bg='#FAD8D6')
         self.pwd_label.grid(row=2, column=0)
 
-        self.pwd_entry = tk.Entry(self.main_frame)
+        self.pwd_entry = tk.Entry(self.main_frame, show="*")
         self.pwd_entry.grid(row=3, column=0, padx=13)
 
         # ---------Buttons
@@ -365,15 +374,16 @@ class UserLogin(tk.Frame):
 
             return
 
-        self.button_label = tk.Label(self.main_frame)
+        self.button_label = tk.Label(self.main_frame, bg="#FAD8D6")
         self.button_label.grid(row=4, column=0)
 
         # Login Button
-        self.login_button = tk.Button(self.button_label, text="Login", command=login_command)
+        self.login_button = tk.Button(self.button_label, text="Login", command=login_command, fg="white", bg="#890B59")
         self.login_button.grid(row=4, column=1, padx=20, pady=5)
 
         # Cancel Button
-        self.cancel_button = tk.Button(self.button_label, text="Cancel", command=self.window.destroy)
+        self.cancel_button = tk.Button(self.button_label, text="Cancel", command=self.window.destroy, fg="white",
+                                       bg="#890B59")
         self.cancel_button.grid(row=4, column=0, padx=20, pady=5)
 
         # ----------------
@@ -481,24 +491,20 @@ class ToShow(tk.Frame):
 
 class ShowUi:
     def __init__(self, show, frame, row):
-        # self.show_scroll = tk.Scrollbar(frame)
-        # self.show_scroll.grid(row=row, column=0)
 
-        # for show in result_dict.values():
-        # self.show_image = tk.PhotoImage(file="Data/Voando-Harry-Potter-PNG-2245377973.png")
-        self.show_label = tk.Label(frame, text="show")
+        self.show_label = tk.Label(frame, text="show", background="#FAD8D6")
         self.show_label.grid(row=row, column=0)
 
-        self.show_text = tk.Text(self.show_label, height=1, width=145)
+        self.show_text = tk.Text(self.show_label, height=4,)
         self.show_text.insert("1.0", str(show["Title"]) +
-                              " genre: " + str(show["Genre"]) +
-                              " seats: " + str(show['Seat']) +
-                              " day: " + str(show['Date']))
+                              "\n genre: " + str(show["Genre"]) +
+                              "\n seats: " + str(show['Seat']) +
+                              "\n day: " + str(show['Date']))
         self.show_text.config(state='disabled')
-        self.show_text.grid(row=row, column=0)
+        self.show_text.grid(row=row, column=0, pady=10)
         self.show = show
-        self.show_button = tk.Button(self.show_label, text="To Show", command=self.to_show)
-        self.show_button.grid(row=row, column=1)
+        self.show_button = tk.Button(self.show_label, text="To Show", command=self.to_show, )
+        self.show_button.grid(row=row, column=1, pady=10)
 
     def to_show(self):
         if type(current_user) == Customer:
@@ -523,7 +529,7 @@ class ShowUi:
             def cancel_command():
                 self.window.destroy()
 
-            self.info_text = tk.Text(self.window, width=50, height=2)
+            self.info_text = tk.Text(self.window, width=50, height=2, fg="#7c044c", bg='#FAD8D6')
             self.info_text.grid(row=0, column=0)
             self.info_text.insert("1.0", "            You have not login yet. \n"
                                          "      Please login or register an account.")
@@ -533,15 +539,18 @@ class ShowUi:
             self.button_label.grid(row=1, column=0)
 
             # Login Button
-            self.login_button = tk.Button(self.button_label, text="Login", command=login_command)
+            self.login_button = tk.Button(self.button_label, text="Login", command=login_command,
+                                          fg="white", bg="#890B59")
             self.login_button.grid(row=1, column=1, padx=50, pady=5)
 
             # Sign In Button
-            self.sign_in_button = tk.Button(self.button_label, text="Sign In", command=sign_in_command)
+            self.sign_in_button = tk.Button(self.button_label, text="Sign In", command=sign_in_command,
+                                            fg="white", bg="#890B59")
             self.sign_in_button.grid(row=1, column=0, padx=50, pady=5)
 
             # Cancel Button
-            self.cancel_button = tk.Button(self.button_label, text="Cancel", command=cancel_command)
+            self.cancel_button = tk.Button(self.button_label, text="Cancel", command=cancel_command,
+                                           fg="white", bg="#890B59")
             self.cancel_button.grid(row=2, column=0, padx=20, pady=5)
 
     def delete(self):
@@ -549,98 +558,189 @@ class ShowUi:
         self.show_label.destroy()
         self.show_button.destroy()
         self.show_text.destroy()
-        # self.show_scroll.destroy()
+
+
+class ResultFrameUI:
+    def __init__(self, show, frame, row):
+
+        self.show_label = tk.Label(frame, text="show", background="#FAD8D6")
+        self.show_label.grid(row=row, column=0)
+
+        self.show_text = tk.Text(self.show_label, height=4,)
+        self.show_text.insert("1.0", str(show["Title"]) +
+                              "\n genre: " + str(show["Genre"]) +
+                              "\n seats: " + str(show['Seat']) +
+                              "\n day: " + str(show['Date']))
+        self.show_text.config(state='disabled')
+        self.show_text.grid(row=row, column=0, pady=10)
+        self.show = show
+        self.show_button = tk.Button(self.show_label, text="To Show", command=self.to_show, )
+        self.show_button.grid(row=row, column=1, pady=10)
 
 
 def main():
     global user_frame_tmp
+
     window = tk.Tk()
     window.title("Movie Ticket Management System")
     window.resizable(False, False)
+    window.geometry("1050x700")
+    window.config(bg="#FAD8D6")
 
-    frame = tk.Frame(window)
-    frame.pack()
+    # Image
+    logo = tk.PhotoImage(file="WhatsApp_Image_2022-12-26_at_16.51.45-removebg-preview (2).png")
+    w1 = tk.Label(window, image=logo)
+    w1.grid(row=4, column=0)
+
+    frame = tk.Frame(window, bg="#FAD8D6")
+    frame.grid(row=1, column=0)
+
+    # For empty space
+    zero_frame = tk.LabelFrame(frame)
+    zero_frame.grid(row=0, column=0, padx=40, pady=40)
+
     # --------------------First Row--------------------
+
     # Main Frame
-    first_frame = tk.LabelFrame(frame, text="")
+    first_frame = tk.LabelFrame(frame, text="", bg="#FAD8D6", relief="groove", bd=4)
     user_frame_tmp = first_frame
-    first_frame.grid(row=0, column=0)
+    first_frame.grid(row=1, column=0)
 
     # Time and Date
-    time_text = tk.Text(first_frame, height=2, width=30)
-    time_text.insert("1.0", "Current Time: " + str(current_datetime.time()) + "\nDate: " + str(current_datetime.date()))
+    time_text = tk.Text(first_frame, height=2, width=80, font=("Helvatica", 10), pady=1, padx=1, spacing1=2)
+    time_text.insert("1.0",
+                     "Current Time: " + str(current_datetime.time())[:-7] + "\nDate: " + str(current_datetime.date()))
     time_text.config(state='disabled')
     time_text.grid(row=0, column=1)
 
     # User Info
-    user_label = tk.Label(first_frame)
+
+    user_label = tk.Label(first_frame, bg="#FAD8D6")
     user_label.grid(row=0, column=2)
 
     # User Login
     def user_login_command():
         UserLogin()
 
-    login_button = tk.Button(user_label, text="Login", command=user_login_command)
+    login_button = tk.Button(user_label, text="Login", command=user_login_command, fg="white", bg="#890B59")
     login_button.grid(row=0, column=2)
 
     # User Sign In
     def user_sign_in_command():
         UserSignIn()
 
-    sign_in_button = tk.Button(user_label, text="Sign In", command=user_sign_in_command)
+    sign_in_button = tk.Button(user_label, text="Sign In", command=user_sign_in_command, fg="white", bg="#890B59")
     sign_in_button.grid(row=1, column=2)
 
+    ################################################
+
     # --------------------Second Row-------------------
-    # Main Frame
-    second_frame = tk.LabelFrame(frame, text="Search Movie")
-    second_frame.grid(row=1, column=0, padx=25, pady=10)
+    # Main Frame 
+
+    second_frame = tk.LabelFrame(frame, text="Search Movie", bd=4, fg="#890B59", bg="#FAD8D6",
+                                 font=("Helvetica", 16), labelanchor="n", relief="groove",
+                                 pady=20, padx=4, height=200, width=200)
+
+    second_frame.grid(row=2, column=0, padx=45, pady=20)
+
     # Genre filter
-    genre_label = tk.Label(second_frame, text="Genre")
+    genre_label = tk.Label(second_frame, text="Genre", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     genre_label.grid(row=0, column=3)
 
     genre_entry = tk.Entry(second_frame)
     genre_entry.grid(row=1, column=3)
 
+    ####
+
+    genre_variable = tk.StringVar(genre_entry)
+    genre_variable.set("No filter")  # default value
+
+    w_genre = OptionMenu(genre_entry,
+                         genre_variable,
+                         "No filter",
+                         'Action',
+                         'Comedy',
+                         'Drama',
+                         'Horror',
+                         'Romance',
+                         'Thriller',
+                         'Western',
+                         'Animation',
+                         'Crime',
+                         'Documentary',
+                         'Family',
+                         'Fantasy',
+                         'History',
+                         'Music',
+                         'Mystery',
+                         'Science Fiction',
+                         'TV Movie',
+                         'War',
+                         'Foreign')
+
+    w_genre.pack()
+
+    #####
     # Release Date filter
-    release_date_label = tk.Label(second_frame, text="Release Date")
+    release_date_label = tk.Label(second_frame, text="Release Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     release_date_label.grid(row=0, column=4)
 
-    release_date_entry = tk.Entry(second_frame)
+    release_date_entry = tk.Entry(second_frame, bg="#f0f0f0")
     release_date_entry.grid(row=1, column=4)
 
     # Language filter
-    language_label = tk.Label(second_frame, text="Language")
+    language_label = tk.Label(second_frame, text="Language", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     language_label.grid(row=0, column=2)
 
     language_entry = tk.Entry(second_frame)
     language_entry.grid(row=1, column=2)
 
+    ###########################################
+    lang_variable = tk.StringVar(language_entry)
+    lang_variable.set("")  # default value
+
+    w_lang = OptionMenu(language_entry, lang_variable, "", "EN", "FR", "HI", "IT", "JA", "ZH", "TR")
+    w_lang.pack()
+    ###
+
     # Title filter
-    title_label = tk.Label(second_frame, text="Title")
+    title_label = tk.Label(second_frame, text="Title", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     title_label.grid(row=0, column=1)
 
-    title_entry = tk.Entry(second_frame)
+    title_entry = tk.Entry(second_frame, bg="#f0f0f0")
     title_entry.grid(row=1, column=1)
 
     # country filter
-    country_label = tk.Label(second_frame, text="Country")
+    country_label = tk.Label(second_frame, text="Country", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     country_label.grid(row=0, column=5)
 
     country_entry = tk.Entry(second_frame)
     country_entry.grid(row=1, column=5)
 
+    ########
+
+    country_variable = tk.StringVar(country_entry)
+    country_variable.set("")  # default value
+
+    w_country = OptionMenu(country_entry, country_variable, "", 'USA', 'UK', 'Canada', 'France', 'Germany', 'Italy',
+                           'Spain', 'Japan', 'China', 'India', 'Australia', 'Brazil', 'Mexico', 'Russia', 'South Korea',
+                           'Turkey', 'Iran', 'Saudi Arabia', 'Egypt', 'Nigeria')
+    w_country.pack()
+
+    #######
+
     # Seat filter
-    seat_label = tk.Label(second_frame, text="Seat")
+    seat_label = tk.Label(second_frame, text="Seat", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     seat_label.grid(row=0, column=6)
 
-    seat_entry = tk.Entry(second_frame)
+    seat_entry = tk.Entry(second_frame, bg="#f0f0f0")
     seat_entry.grid(row=1, column=6)
 
     # Date filter
-    date_label = tk.Label(second_frame, text="Date")
+    date_label = tk.Label(second_frame, text="Date", fg="#7c044c", bg='#FAD8D6', font=("Helvetica", 12))
     date_label.grid(row=0, column=7)
 
-    date_entry = tk.Entry(second_frame)
+    date_entry = tk.Entry(second_frame, bg="#f0f0f0")
     date_entry.grid(row=1, column=7)
 
     # --------------------------------------------
@@ -651,18 +751,16 @@ def main():
         print("Search pressed!")
 
         filter_values = {"Title": title_entry.get(),
-                         "Language": language_entry.get(),
-                         "Genre": genre_entry.get(),
+                         "Language": lang_variable.get(),
+                         "Genre": genre_variable.get(),
                          "Rel_date": release_date_entry.get(),
-                         "Country": country_entry.get(),
+                         "Country": country_variable.get(),
                          "Seat": seat_entry.get(),
                          "Date": date_entry.get()
                          }
 
         result_dict = Catalog.search_show_by_filter(show_list, filter_values)
-        print(result_dict)
-        # dict_result = movie_catalog.search_by_filter(filter_values)
-        # print(dict_result)
+
         try:
             for instance in result_instance:
                 if instance is not None:
@@ -670,13 +768,43 @@ def main():
         except AttributeError:
             print("movie instance not deleted")
             pass
-        i = 2
+
+        third_frame = tk.LabelFrame(frame, text="Results", bd=4, fg="#890B59", bg="#FAD8D6",
+                                    font=("Helvetica", 16), labelanchor="n", relief="groove",
+                                    pady=1, padx=4)
+
+        # Create a main frame
+        result_main_frame = tk.Frame(third_frame)
+        result_instance.append(result_main_frame)
+        result_main_frame.pack(fill=tk.BOTH, expand=1)
+
+        # Create canvas
+        result_canvas = tk.Canvas(result_main_frame,width=950, bd=4, bg="#FAD8D6",)
+
+        result_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+
+        # add scrollbar to canvas
+        my_scrollbar = tk.Scrollbar(result_main_frame, orient="vertical", command=result_canvas.yview)
+        my_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # configure the canvas
+        result_canvas.config(yscrollcommand=my_scrollbar.set)
+        result_canvas.bind('<Configure>', lambda e: result_canvas.configure(scrollregion=result_canvas.bbox("all")))
+
+        # Create another frame inside the canvas
+        result_second_frame = tk.Frame(result_canvas)
+
+        # Add that new frame to a window in the Canvas
+        result_canvas.create_window((0, 0), window=result_second_frame, anchor=tk.NW)
+        i = 0
         for show in result_dict.values():
-            result_instance.append(ShowUi(show, frame, i))
+            ShowUi(show, result_second_frame, i)
             i += 1
+        third_frame.grid(row=3, column=0, padx=45, pady=20)
+
 
     # Search Button
-    search_button = tk.Button(second_frame, text="Search", command=search_by_filter)
+    search_button = tk.Button(second_frame, text="Search", command=search_by_filter, fg="white", bg="#890B59")
     search_button.grid(row=1, column=8)
 
     window.mainloop()
@@ -684,3 +812,34 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# admin UI? maybe
+"""def cancel_booking():
+        # Get the selected booking number
+        
+        window = tk.Tk()
+        window.title("Cancel Booking")
+        selected_booking = bookings_listbox.get(bookings_listbox.curselection())
+        # Find the booking object in the list of bookings
+        booking_to_cancel = None
+        for booking in booking_list:
+            if booking.get_booking_number() == selected_booking:
+                booking_to_cancel = booking
+                break
+        # If a booking was found, cancel it
+        if booking_to_cancel:
+            booking_to_cancel.set_status(BookingStatus.CANCELED)
+            # Remove the booking from the listbox
+            bookings_listbox.delete(bookings_listbox.curselection())
+
+    # Create a listbox to display the bookings
+        bookings_listbox = tk.Listbox(window)
+        bookings_listbox.pack()
+
+    # Add the bookings to the listbox
+        for booking in booking_list:
+            bookings_listbox.insert(tk.END, booking.get_booking_number())
+
+    # Create a button to cancel the selected booking
+        cancel_button = tk.Button(window, text="Cancel Booking", command=cancel_booking)
+        cancel_button.grid(row=3,column=0)"""
