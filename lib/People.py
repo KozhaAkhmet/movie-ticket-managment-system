@@ -2,9 +2,7 @@ from abc import ABC
 
 from lib.Constants import AccountStatus, Address
 from lib.Customer import Booking,BookingStatus
-# For simplicity, we are not defining getter and setter functions. The reader can
-# assume that all class attributes are private and accessed through their respective
-# public getter methods and modified only through their public methods function.
+
 
 
 class Account:
@@ -64,13 +62,6 @@ class Customer(Person):
         self.__account = account
         self.__bookings = []
 
-    # def compare_accounts(self,
-    #                      compare_with: Account):
-    #     if (self.__account.get_user_id() == compare_with.get_user_id()) &&
-    #         self.__account.get_password() == compare_with.get_password():
-    #         return True
-    #
-    #     return False
 
     def get_account(self):
         return self.__account
@@ -86,17 +77,6 @@ class Customer(Person):
 
 
 class Admin(Person):
-    """def add_movie(self, movie):
-            
-        # Add the movie to the list of movies
-        self.__account.movies.append(movie)
-
-    def add_show(self, show):
-        None
-
-    def block_customer(self, customer: Customer):
-        customer.get_account().status = AccountStatus.BLOCKED"""
-
 
     def cancel_booking(self, booking: Booking):
        booking.set_status(BookingStatus.CANCELED)

@@ -450,12 +450,6 @@ class ToShow(tk.Frame):
         self.seat_button_label = tk.Label(self.label2)
         self.seat_button_label.grid(row=1, column=0, padx=10, pady=20)
 
-        """for i in range(0, coulomn):
-            for j in range(0, row):
-                for show_seat in cinema_hall_seats:
-                    if show_seat.get_seat_row() == j and \
-                            show_seat.get_seat_coulomn() == i:
-                        SeatButton(self.seat_button_label, j, i, show_seat)"""
         [SeatButton(self.seat_button_label, j, i, show_seat) for show_seat in cinema_hall_seats for i in range(0, coulomn) for j in range(0, row) if show_seat.get_seat_row() == j and show_seat.get_seat_coulomn() == i]
 
         # Label 3
